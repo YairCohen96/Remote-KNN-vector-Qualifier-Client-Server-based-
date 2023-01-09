@@ -1,0 +1,202 @@
+#include "Validation.h"
+#include <string.h>
+#include <string>
+#include <vector>
+#include <list>
+#include <iostream>
+using namespace std;
+
+    /**
+     * Validation - empty constructor.
+    */
+    Validation::Validation(){
+
+    }
+    
+    /**
+     * ~Validation - empty distructor.
+    */
+    Validation::~Validation(){
+
+    }
+
+    /**
+     * validK - check if the string has only digits
+    */
+    bool Validation::validK(string str) {
+        int i, strLength = str.size();
+        bool numStarted = false;
+        //run on the string check if there is a non digit char
+        for ( i = 0; i < strLength; i++)
+        {
+            if (!numStarted && isdigit(str[i]))
+            {
+                numStarted = true;
+            }else if (!isdigit(str[i]) && str[i] != ' ')
+            {
+                return false;
+            } else if(!isdigit(str[i]) && str[i] == ' ' && numStarted){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * validDist - compare the string to the 5 types.
+    */
+    bool Validation::validDist(string distanceType){
+        if (!distanceType.compare("AUC")){
+            return true;
+        } else if (!distanceType.compare("MAN")){
+            return true;
+        } else if (!distanceType.compare("CHB")){
+            return true;
+        } else if (!distanceType.compare("CAN")){
+            return true;
+        } else if (!distanceType.compare("MIN")){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * validVector - run validation on string to check if it can be modify to be vector of double
+    */
+    bool Validation::validVector(string s){
+        int i = 0, sLen = s.length();
+        int v2Size = 0;
+        bool minusF = false, dotF = false, letterEF = false, numF = false;
+        for(i = 0; i < sLen; i++) {
+            if(s[i] == ' ' && numF){
+                v2Size++;
+                minusF = false;
+                dotF = false;
+                letterEF = false;
+                numF = false;
+            }else if(s[i] == ' ' && !numF){
+
+            }else if(s[i] == '-'){
+                if(numF || minusF){
+                    if(s[i - 1] != 'e' && s[i - 1] != 'E'){
+                        return false;
+                    }
+                }
+                minusF = true;
+            }else if(s[i] == '.'){
+                if(!numF || dotF){
+                    return false;
+                }
+                dotF = true;
+            }else if((s[i] < '0' || s[i] > '9')){
+                if(s[i] == 'e' || s[i] == 'E'){
+                }
+                else {
+                    cout <<s[i];
+                    return false;
+                }
+            } else if(s[i] >= '0' && s[i] <= '9') {
+                numF = true;
+            }
+        }
+    return true;
+    }
+    
+    /**
+     * validVectorsCompare - check if the vectors can be compared.
+    */
+    bool Validation::validVectorsCompare(vector<double> v1, vector<double> v2){
+        if (v1.size() != v2.size()){
+            return false;
+        } 
+        return true;
+    }
+
+    /**
+     * validVDK - check if string can be modify into vector and if there is dist and k.
+    */
+    bool Validation::validVDK(vector<string> strVect){
+        if (strVect.size() != 3)
+        {
+            return false;
+        }
+        string vStr = strVect.at(0), distStr = strVect.at(1), kStr = strVect.at(2);
+        if (validVector(vStr) && validDist(distStr) && validK(kStr))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+ * strToKDV - get a string and change it to vector of 3 strings.
+ * return - vector with three strings: 1. vector of numbers, 2. distance type, 3. k.
+*/
+vector<string> Validation::strToKDV(string str){
+    vector<string> stringVect;
+    bool failed = false;
+    int endDistIndex = 0, distIndex = 0, kIndex = 0, endKIndex = 0, i, strLength = str.size();
+    //find the indexes of the distance and the k.
+    for (i = 0; i < strLength; i++)
+    {
+        if(distIndex == 0){
+            if(isalpha(str[i]) && i >= 1 && str[i-1] == ' '){
+                distIndex = i;
+            }
+        } else if(endDistIndex == 0){
+            if(!isalpha(str[i])){
+                if(str[i] == ' ') {
+                    endDistIndex = i;
+                } else {
+                    failed = true;
+                    break;
+                }
+            }
+        } else if(kIndex == 0){
+            if(isdigit(str[i])){
+                kIndex = i;
+            }
+        } else if(endKIndex == 0){
+            if(!isdigit(str[i])){
+                if(str[i] == ' ') {
+                    endKIndex = i;
+                } else {
+                    failed = true;
+                    break;
+                }
+            }
+        } else if(endKIndex != 0){
+            if(str[i] != ' '){
+                failed = true;
+                break;
+            }
+        }  
+    }
+    //check if the k ends in the end of the string.
+    if(endKIndex == 0){
+        endKIndex = strLength;
+    }
+    //didnt enetered a distance or k.
+    if (distIndex == 0 || kIndex == 0 || failed)
+    {
+        string comment = "invalid";
+        stringVect.push_back(comment);
+    }else {
+        string vectStr, kStr, distStr;
+        //substr(starting index, length of chars to copy).
+        //seperate the given string to three strings representing vector, distance,k.
+        vectStr = str.substr(0, distIndex - 1);
+        stringVect.push_back(vectStr);
+        distStr = str.substr(distIndex, (endDistIndex - distIndex));
+        stringVect.push_back(distStr);
+        kStr = str.substr(kIndex, (endKIndex - kIndex));
+        stringVect.push_back(kStr);
+        //run validation on the strings vector.
+        if(!validVDK(stringVect)) {
+            stringVect.clear();
+            string comment = "invalid";
+            stringVect.push_back(comment);
+        } 
+    }
+    return stringVect;
+}
