@@ -39,6 +39,33 @@ KnnCalc::KnnCalc(int j, string file, string type)
     distanceType = type;
 }
 
+pair<vector<double>, string> KnnCalc::getVTFromCSVLine(string s){
+    pair<vector<double>, string> pair1;
+    pair1.second = "";
+    vector<double> v;
+    if(!valid.validVectorAndType(s)){
+        pair1.first = v;
+    }else {
+        istringstream ss(s);
+        string temp = "";
+        while(ss){
+            double x;
+            ss >> x;
+            v.push_back(x);
+            ss.get();
+        }
+        /*
+         * check if in ss remained numbers if so exit.
+        * check if the next char of stream is part of number or part of the name.
+        * is it okay to string - a type, to start with a number
+        */
+        ss >> temp;
+        pair1.first = v;
+        pair1.second = temp;
+    }
+    return pair1;
+}
+
 /**
  * setDistanceList - safly collects the right distances from the input vector (according to chosen metrica)
  * to a list of pairs - <distance, type of specific vector according to file>
@@ -49,61 +76,66 @@ int KnnCalc::setDistanceList()
     ifstream inFile;
     inFile.open(inputFile);
     if (!inFile.is_open())
-    { // error openning file
-        // cout << "error openning file";
-        // exit(1);
+    { 
+        // error openning file
         return 0;
     }
-    int v1Length = calc.getV1().size();
-    vector<double> v;
+    // int v1Length = calc.getV1().size();
+    // vector<double> v;
     string s;
     while (getline(inFile, s))
     {
-        if(!validString(s)){
-            // cout << "one of the vector wasnt ok from file";
-            // exit(1);
-            return 0;
-        }
-        istringstream ss(s);
-        string temp;
-        for (int i = 0; i < v1Length; i++)
+        pair<vector<double>, string>  pair1 = getVTFromCSVLine(s);
+
+        // if(!validString(s)){
+        //     // cout << "one of the vector wasnt ok from file";
+        //     // exit(1);
+        //     return 0;
+        // }
+        // istringstream ss(s);
+        // string temp;
+        // for (int i = 0; i < v1Length; i++)
+        // {
+        //     double x;
+        //     ss >> x;
+        //     v.push_back(x);
+        //     ss.get();
+        //     // check if there are no numbers in the line
+        //     if (!ss)
+        //     {
+        //         // cout << "the file's vectors arent the same length as the given one: shorter\n";
+        //         // exit(1);
+        //         return 0;
+        //     }
+        // }
+        // /*
+        //  * check if in ss remained numbers if so exit.
+        //  * check if the next char of stream is part of number or part of the name.
+        //  * is it okay to string - a type, to start with a number
+        //  */
+        // if (ss.peek() >= '0' && ss.peek() <= '9')
+        // {
+        //     // cout << "the file's vectors arent the same length as the given one: longer\n";
+        //     // exit(1);
+        //     return 0;
+        // }
+        // ss >> temp;
+
+        //the vector that entered is smaller than the existing vector.
+        if (pair1.first.size() != calc.getV1().size() || pair1.first.size() == 0)
         {
-            double x;
-            ss >> x;
-            v.push_back(x);
-            ss.get();
-            // check if there are no numbers in the line
-            if (!ss)
-            {
-                // cout << "the file's vectors arent the same length as the given one: shorter\n";
-                // exit(1);
-                return 0;
-            }
+            return 0;//to stop or continue for the next line.
         }
-        /*
-         * check if in ss remained numbers if so exit.
-         * check if the next char of stream is part of number or part of the name.
-         * is it okay to string - a type, to start with a number
-         */
-        if (ss.peek() >= '0' && ss.peek() <= '9')
-        {
-            // cout << "the file's vectors arent the same length as the given one: longer\n";
-            // exit(1);
-            return 0;
-        }
-        ss >> temp;
-        calc.setV2(v);
-        vectorList.push_back(v);
+        calc.setV2(pair1.first);
+        vectorList.push_back(pair1.first);
         pair<double, string> p1;
-        p1.second = temp;
         p1.first = wantedDist(); //wantedDist return 1 if it failed.
+        p1.second = "";
         //check if it failed.
         if(p1.first == -1){
             return 0;
         }
         distanceList1.push_back(p1);
-        v.clear();
-        temp = "";
     }
     inFile.close();
     sort(distanceList1.begin(), distanceList1.end());
@@ -218,8 +250,6 @@ bool KnnCalc::validString(string s)
     for(i = 0; i < sLen; i++) {
         //the new vector is bigger than the user vector
         if(v2Size > v1Size){
-            // cout << "the vector from the file is longer";
-            // exit(1);
             return false;        
         }else if(s[i] == ',' && numF){
             // seperator detected so prepare for new number.
@@ -241,8 +271,6 @@ bool KnnCalc::validString(string s)
         }else if(s[i] == '.'){
             //do checks after see dot.
             if(!numF || dotF){
-                // cout<<"there is '.' in wrong place";
-                // exit(1);
                 return false;
             }
             dotF = true;
