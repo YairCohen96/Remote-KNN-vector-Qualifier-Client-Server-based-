@@ -5,3 +5,9 @@ DistanceCalc.o
 server.out
 Server2.0.o
 Validation.o
+datasets/beans/beans_Classified.txt
+datasets/beans/beans_UnClassified.csv
+datasets/iris/iris_classified.txt
+datasets/wine/wine_Classified.csv
+datasets/iris/iris_Unclassified.csv
+datasets/wine/wine_UnClassified.csv
