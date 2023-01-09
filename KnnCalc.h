@@ -5,6 +5,7 @@
 #ifndef KNNCALC_H
 #define KNNCALC_H
 #include "DistanceCalc.h"
+#include "Validation.h"
 #include <string>
 #include <utility>
 
@@ -17,6 +18,7 @@ private:
     string distanceType; // argv[3] - chosen metric
     vector<vector<double>> vectorList;
     vector<pair<double, string>> distanceList1;
+    Validation valid;
 
     //private methods:
     int setDistanceList();
@@ -31,7 +33,7 @@ public:
     DistanceCalc getCalc();
     string launchCheckVectors();
     void setInputVector(vector<double> update);
-    
+    pair<vector<double>, string> getVTFromCSVLine(string s);
 };
 
 

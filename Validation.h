@@ -23,6 +23,7 @@ public:
     bool validVector(string s);
     bool validVDK(vector<string> strVectt);
     bool validVectorsCompare(vector<double> v1, vector<double> v2);
+    bool validVectorAndType(string str);
     vector<string> strToKDV(string str);
 };
 

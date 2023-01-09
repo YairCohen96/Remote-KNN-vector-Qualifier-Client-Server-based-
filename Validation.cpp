@@ -128,6 +128,48 @@ using namespace std;
         return false;
     }
 
+    bool Validation::validVectorAndType(string str){
+        int i = 0, sLen = str.length();
+        bool minusF = false, dotF = false, letterEF = false, numF = false, theType = false;
+        for(i = 0; i < sLen; i++) {     
+            if(str[i] == ',' && numF){
+                // seperator detected so prepare for new number.
+                minusF = false;
+                dotF = false;
+                letterEF = false;
+                numF = false;
+            } else if(str[i] == ',' && theType) {
+                //saw allready something that can be a type so if there is something after return false.
+                return false;
+            } else if(str[i] == '-'){
+                //do some checks after find '-'char.
+                if(numF || minusF){
+                    //after the letter E as number will come '-'.
+                    if(str[i - 1] != 'e' && str[i - 1] != 'E'){
+                        return false;
+                    }
+                }
+                minusF = true;
+            } else if(str[i] == '.'){
+                //do checks after see dot.
+                if(!numF || dotF){
+                    return false;
+            }
+            dotF = true;
+            } else if((str[i] < '0' || str[i] > '9')){
+                if(str[i] == 'e' || str[i] == 'E' && !letterEF){
+                    letterEF = true;
+                }
+                else {
+                    theType = true;
+                }
+            } else if(str[i] >= '0' && str[i] <= '9') {
+                numF = true;
+            }
+        }
+        return true;
+    }
+
     /**
  * strToKDV - get a string and change it to vector of 3 strings.
  * return - vector with three strings: 1. vector of numbers, 2. distance type, 3. k.
