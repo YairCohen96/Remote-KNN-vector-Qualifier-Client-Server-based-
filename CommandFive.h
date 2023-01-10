@@ -11,7 +11,7 @@
 #include <StandardIO.h>
 #include <Command.h>
 using namespace std;
-class CommandFive : Command
+class CommandFive : public Command
 {
 private:
 public:

@@ -10,11 +10,12 @@
 #include <SocketIO.h>
 #include <StandardIO.h>
 #include <Command.h>
+#include <KnnCalc.h>
 using namespace std;
-class CommandThree : Command
+class CommandThree : public Command
 {
 private:
-    KnnCalc k;
+    //KnnCalc k;
 public:
     void execute();
 };
