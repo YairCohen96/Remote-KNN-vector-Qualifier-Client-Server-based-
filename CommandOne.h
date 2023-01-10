@@ -13,9 +13,8 @@
 using namespace std;
 class CommandOne : public Command
 {
-private:
 public:
-    void execute();
+    void execute() override;
 };
 
 #endif

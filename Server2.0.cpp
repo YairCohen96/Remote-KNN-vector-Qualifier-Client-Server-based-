@@ -28,15 +28,20 @@ int main(int argc, char *argv[])
         std::cerr << "Invalid port number" << std::endl;
         return 1;
     }
+    Validation valid;
     // Validate file before openning the server for clients
-    ifstream inFile;
+    /*ifstream inFile;
         inFile.open(argv[1]);
         if (!inFile.is_open())
         { // error openning file
             cout << "error openning file" << std::endl;
             return 1;
         }
-        inFile.close();
+        inFile.close();*/
+    if(!valid.validFile(argv[1])) {
+        cout << "error openning file" << std::endl;
+        return 1;
+    }
         
 
     struct sockaddr_in sa;
@@ -104,7 +109,7 @@ int main(int argc, char *argv[])
             }
 
             string str(buffer), vectorAsString, respon = "";
-            Validation valid;
+            
             vector<string> strVect = valid.strToKDV(str);
             v.clear();
             dist.clear();

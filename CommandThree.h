@@ -14,6 +14,7 @@ using namespace std;
 class CommandThree : Command
 {
 private:
+    KnnCalc k;
 public:
     void execute();
 };

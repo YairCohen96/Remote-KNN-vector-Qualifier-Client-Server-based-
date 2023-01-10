@@ -25,6 +25,7 @@ public:
     bool validVectorsCompare(vector<double> v1, vector<double> v2);
     bool validVectorAndType(string str);
     vector<string> strToKDV(string str);
+    bool validFile(string path);
 };
 
 
