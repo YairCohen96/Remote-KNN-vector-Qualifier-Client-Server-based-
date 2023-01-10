@@ -39,6 +39,10 @@ KnnCalc::KnnCalc(int j, string file, string type)
     distanceType = type;
 }
 
+/**
+ * gets a pair of vector and its classification from a data file
+ * could be also an unclassified data (string will be empty)
+*/
 pair<vector<double>, string> KnnCalc::getVTFromCSVLine(string s){
     pair<vector<double>, string> pair1;
     pair1.second = "";
