@@ -342,5 +342,5 @@ bool Validation::existFiles(string file1, string file2){
     if(!file2.size()){
         return false;
     }
-    
+    return true;
 }
