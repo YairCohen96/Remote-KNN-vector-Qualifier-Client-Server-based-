@@ -6,11 +6,11 @@
 #define COMMANDTHREE_H
 #include <string>
 #include <iostream>
-#include <DefaultIO.h>
-#include <SocketIO.h>
-#include <StandardIO.h>
-#include <Command.h>
-#include <KnnCalc.h>
+#include "DefaultIO.h"
+#include "SocketIO.h"
+#include "StandardIO.h"
+#include "Command.h"
+#include "KnnCalc.h"
 using namespace std;
 class CommandThree : public Command
 {
