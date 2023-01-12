@@ -334,3 +334,13 @@ bool Validation::validFile(string path) {
         return true;
     
 }
+
+bool Validation::existFiles(string file1, string file2){
+    if(!file1.size()){
+        return false;
+    }
+    if(!file2.size()){
+        return false;
+    }
+    
+}

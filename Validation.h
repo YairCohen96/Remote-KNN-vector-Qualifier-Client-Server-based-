@@ -26,6 +26,7 @@ public:
     bool validVectorAndType(string str);
     vector<string> strToKDV(string str);
     bool validFile(string path);
+    bool existFiles(string file1, string file2);
 };
 
 
