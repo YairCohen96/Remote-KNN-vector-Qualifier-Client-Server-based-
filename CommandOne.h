@@ -6,10 +6,11 @@
 #define COMMANDONE_H
 #include <string>
 #include <iostream>
-#include <DefaultIO.h>
-#include <SocketIO.h>
-#include <StandardIO.h>
-#include <Command.h>
+#include "DefaultIO.h"
+#include "SocketIO.h"
+#include "StandardIO.h"
+#include "Command.h"
+
 using namespace std;
 class CommandOne : public Command
 {

@@ -6,12 +6,13 @@
 #define COMMAND_H
 #include <string>
 #include <iostream>
-#include <DefaultIO.h>
-#include <SocketIO.h>
-#include <StandardIO.h>
-#include <Listener.h>
-#include <Notifier.h>
-#include <Validation.h>
+#include "Listener.h"
+#include "Notifier.h"
+#include "Validation.h"
+#include "DefaultIO.h"
+#include "SocketIO.h"
+#include "StandardIO.h"
+
 using namespace std;
 //inherate two interfaces - listener and notifier
 class Command : public Notifier, public Listener{

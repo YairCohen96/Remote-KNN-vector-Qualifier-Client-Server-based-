@@ -29,7 +29,7 @@ private:
 
     
 public:
-    KnnCalc(int j, std::string file, std::string DistanceType);
+    KnnCalc(int newK, std::string file, std::string DistanceType);
     DistanceCalc getCalc();
     string launchCheckVectors();
     void setInputVector(vector<double> update);

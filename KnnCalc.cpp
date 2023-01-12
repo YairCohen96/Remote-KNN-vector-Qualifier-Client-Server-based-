@@ -32,15 +32,15 @@ using namespace std;
    calc already initialized
  * 
  */
-KnnCalc::KnnCalc(int j, string file, string type)
+KnnCalc::KnnCalc(int newK, string file, string type)
 {
-    k = j;
+    k = newK;
     inputFile = file;
     distanceType = type;
 }
 
 /**
- * gets a pair of vector and its classification from a data file
+ * gets a pair of vector and its Type classification from a data file
  * could be also an unclassified data (string will be empty)
 */
 pair<vector<double>, string> KnnCalc::getVTFromCSVLine(string s){
@@ -90,41 +90,6 @@ int KnnCalc::setDistanceList()
     while (getline(inFile, s))
     {
         pair<vector<double>, string>  pair1 = getVTFromCSVLine(s);
-
-        // if(!validString(s)){
-        //     // cout << "one of the vector wasnt ok from file";
-        //     // exit(1);
-        //     return 0;
-        // }
-        // istringstream ss(s);
-        // string temp;
-        // for (int i = 0; i < v1Length; i++)
-        // {
-        //     double x;
-        //     ss >> x;
-        //     v.push_back(x);
-        //     ss.get();
-        //     // check if there are no numbers in the line
-        //     if (!ss)
-        //     {
-        //         // cout << "the file's vectors arent the same length as the given one: shorter\n";
-        //         // exit(1);
-        //         return 0;
-        //     }
-        // }
-        // /*
-        //  * check if in ss remained numbers if so exit.
-        //  * check if the next char of stream is part of number or part of the name.
-        //  * is it okay to string - a type, to start with a number
-        //  */
-        // if (ss.peek() >= '0' && ss.peek() <= '9')
-        // {
-        //     // cout << "the file's vectors arent the same length as the given one: longer\n";
-        //     // exit(1);
-        //     return 0;
-        // }
-        // ss >> temp;
-
         //the vector that entered is smaller than the existing vector.
         if (pair1.first.size() != calc.getV1().size() || pair1.first.size() == 0)
         {
