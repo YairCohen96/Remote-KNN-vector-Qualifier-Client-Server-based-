@@ -56,7 +56,9 @@ pair<vector<double>, string> KnnCalc::getVTFromCSVLine(string s){
             double x;
             ss >> x;
             v.push_back(x);
+            
             ss.get();
+            if (!isdigit(ss.peek())) {break;}
         }
         /*
          * check if in ss remained numbers if so exit.
@@ -98,8 +100,9 @@ int KnnCalc::setDistanceList()
         calc.setV2(pair1.first);
         vectorList.push_back(pair1.first);
         pair<double, string> p1;
-        p1.first = wantedDist(); //wantedDist return 1 if it failed.
-        p1.second = "";
+        p1.first = wantedDist(); //wantedDist return -1 if it failed.
+        //p1.second = "";
+        p1.second = pair1.second;
         //check if it failed.
         if(p1.first == -1){
             return 0;
@@ -159,7 +162,7 @@ string KnnCalc::TheMostReturnType()
     {
         distanceMap1.insert(pair<string, double>(distanceList1.at(i).second, distanceList1.at(i).first));
     }
-    pair<int, string> max1;
+    pair<double, string> max1;
     max1.first = 0;
     map<string, double>::iterator it1;
     for (it1 = distanceMap1.begin(); it1 != distanceMap1.end(); it1++)
