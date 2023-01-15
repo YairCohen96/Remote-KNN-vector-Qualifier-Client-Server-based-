@@ -26,7 +26,7 @@ protected:
     Validation validator;
     
 public:
-    virtual void execute();
+    virtual void execute() {};
 };
 
 
