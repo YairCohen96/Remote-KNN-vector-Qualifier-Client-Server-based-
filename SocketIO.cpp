@@ -3,11 +3,20 @@
 #include <string>
 
 using namespace std;
+
+/**
+ * SocketIO - set the client socket as given.
+ * @param client_sockfd - client socket to send and recive.
+*/
 SocketIO::SocketIO(int client_sockfd)
 {
     this->client_sockfd = client_sockfd;
 };
 
+/**
+ * read - read from the given socket.
+ *  @return input string
+*/
 string SocketIO::read()
 {
     char buffer[4096] = "";
@@ -33,6 +42,10 @@ string SocketIO::read()
     return res;
 };
 
+/**
+ * write - write given text to given socket
+ * @param text - string to send.
+*/
 void SocketIO::write(string text)
 {
     const char *response = text.c_str();

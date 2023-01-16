@@ -2,6 +2,10 @@
 
 using namespace std;
 
+/**
+ * execute - emplmntation of command header.
+*/
+
 void CommandThree::execute() {
     //check avalability for runchecking if not exist print "data upload please."
     if(!validator.existFiles(my_data.unclass_path, my_data.class_path)){

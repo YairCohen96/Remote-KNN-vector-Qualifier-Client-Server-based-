@@ -11,6 +11,11 @@
 #include "Validation.h"
 using namespace std;
 
+/**
+ * main - generate a client side and comunicate with user and server.
+ * @param argc - num of arguments. 
+ * @param argv[] - array of chars arrays.
+*/
 int main(int argc, char *argv[])
 {
     // Validate command-line arguments

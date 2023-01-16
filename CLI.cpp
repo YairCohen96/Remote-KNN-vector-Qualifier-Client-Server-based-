@@ -1,9 +1,19 @@
 #include "CLI.h"
 
 using namespace std;
+
+/**
+ * CLI - constructor
+ * @param - client_sockfd 
+ * get socket as param and use in socket io
+*/
 CLI::CLI(int client_sockfd) {
     dio = new SocketIO(client_sockfd);
 }
+
+/**
+ * start - start cli start new 1-5,8 commands and call to the correct command
+*/
 void CLI::start()
 {
     CommandOne one;
