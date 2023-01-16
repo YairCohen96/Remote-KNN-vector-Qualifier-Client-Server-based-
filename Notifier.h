@@ -19,6 +19,7 @@ public:
             listeners.at(i).setData(data);
         }
     };
+    
 };
 
 #endif

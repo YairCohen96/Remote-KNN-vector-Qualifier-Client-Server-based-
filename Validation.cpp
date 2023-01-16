@@ -227,119 +227,204 @@ bool Validation::validVectorAndType(string str)
  * strToKDV - get a string and change it to vector of 3 strings.
  * return - vector with three strings: 1. vector of numbers, 2. distance type, 3. k.
  */
-vector<string> Validation::strToKDV(string str)
+vector<string> Validation::strToKDV(string str, int assign)
 {
     vector<string> stringVect;
+    bool dk = true;
+    if (assign == 3)
+    {
+        dk = false;
+    }
     bool failed = false;
-    int endDistIndex = 0, distIndex = 0, kIndex = 0, endKIndex = 0, i, strLength = str.size();
-    // find the indexes of the distance and the k.
-    for (i = 0; i < strLength; i++)
+
+    if (!dk)
     {
-        if (distIndex == 0)
+        int endDistIndex = 0, distIndex = 0, kIndex = 0, endKIndex = 0, i, strLength = str.size();
+        // find the indexes of the distance and the k.
+        for (i = 0; i < strLength; i++)
         {
-            if (isalpha(str[i]) && i >= 1 && str[i - 1] == ' ')
+            if (distIndex == 0)
             {
-                distIndex = i;
-            }
-        }
-        else if (endDistIndex == 0)
-        {
-            if (!isalpha(str[i]))
-            {
-                if (str[i] == ' ')
+                if (isalpha(str[i]) && i >= 1 && str[i - 1] == ' ')
                 {
-                    endDistIndex = i;
+                    distIndex = i;
                 }
-                else
+            }
+            else if (endDistIndex == 0)
+            {
+                if (!isalpha(str[i]))
+                {
+                    if (str[i] == ' ')
+                    {
+                        endDistIndex = i;
+                    }
+                    else
+                    {
+                        failed = true;
+                        break;
+                    }
+                }
+            }
+            else if (kIndex == 0)
+            {
+                if (isdigit(str[i]))
+                {
+                    kIndex = i;
+                }
+            }
+            else if (endKIndex == 0)
+            {
+                if (!isdigit(str[i]))
+                {
+                    if (str[i] == ' ')
+                    {
+                        endKIndex = i;
+                    }
+                    else
+                    {
+                        failed = true;
+                        break;
+                    }
+                }
+            }
+            else if (endKIndex != 0)
+            {
+                if (str[i] != ' ')
                 {
                     failed = true;
                     break;
                 }
             }
         }
-        else if (kIndex == 0)
+        // check if the k ends in the end of the string.
+        if (endKIndex == 0)
         {
-            if (isdigit(str[i]))
-            {
-                kIndex = i;
-            }
+            endKIndex = strLength;
         }
-        else if (endKIndex == 0)
+        // didnt enetered a distance or k.
+        if (distIndex == 0 || kIndex == 0 || failed)
         {
-            if (!isdigit(str[i]))
-            {
-                if (str[i] == ' ')
-                {
-                    endKIndex = i;
-                }
-                else
-                {
-                    failed = true;
-                    break;
-                }
-            }
-        }
-        else if (endKIndex != 0)
-        {
-            if (str[i] != ' ')
-            {
-                failed = true;
-                break;
-            }
-        }
-    }
-    // check if the k ends in the end of the string.
-    if (endKIndex == 0)
-    {
-        endKIndex = strLength;
-    }
-    // didnt enetered a distance or k.
-    if (distIndex == 0 || kIndex == 0 || failed)
-    {
-        string comment = "invalid";
-        stringVect.push_back(comment);
-    }
-    else
-    {
-        string vectStr, kStr, distStr;
-        // substr(starting index, length of chars to copy).
-        // seperate the given string to three strings representing vector, distance,k.
-        vectStr = str.substr(0, distIndex - 1);
-        stringVect.push_back(vectStr);
-        distStr = str.substr(distIndex, (endDistIndex - distIndex));
-        stringVect.push_back(distStr);
-        kStr = str.substr(kIndex, (endKIndex - kIndex));
-        stringVect.push_back(kStr);
-        // run validation on the strings vector.
-        if (!validVDK(stringVect))
-        {
-            stringVect.clear();
             string comment = "invalid";
             stringVect.push_back(comment);
         }
+        else
+        {
+            string vectStr, kStr, distStr;
+            // substr(starting index, length of chars to copy).
+            // seperate the given string to three strings representing vector, distance,k.
+            vectStr = str.substr(0, distIndex - 1);
+            stringVect.push_back(vectStr);
+            distStr = str.substr(distIndex, (endDistIndex - distIndex));
+            stringVect.push_back(distStr);
+            kStr = str.substr(kIndex, (endKIndex - kIndex));
+            stringVect.push_back(kStr);
+            // run validation on the strings vector.
+            if (!validVDK(stringVect))
+            {
+                stringVect.clear();
+                string comment = "invalid";
+                stringVect.push_back(comment);
+            }
+        }
+        return stringVect;
     }
-    return stringVect;
+    // check only Dist and K
+    else
+    {
+        int endDistIndex = 0, distIndex = 0, i, strLength = str.size();
+        for (i = 0; i < strLength; i++)
+        {
+
+            if (distIndex == 0)
+            {
+                if (isalpha(str[i]) && i >= 1 && str[i - 1] == ' ')
+                {
+                    distIndex = i;
+                }
+            }
+            else if (endDistIndex == 0)
+            {
+                if (!isalpha(str[i]))
+                {
+                    if (str[i] == ' ')
+                    {
+                        endDistIndex = i;
+                    }
+                    else
+                    {
+                        failed = true;
+                        break;
+                    }
+                }
+            }
+            
+        }
+            // check if the k ends in the end of the string.
+            if (endDistIndex == 0)
+            {
+                endDistIndex = strLength;
+            }
+            // didnt enetered a distance or k.
+            if (distIndex == 0 || failed)
+            {
+                string comment = "invalid";
+                stringVect.push_back(comment);
+            }
+            else
+            {
+                string kStr, distStr;
+                // substr(starting index, length of chars to copy).
+                // seperate the given string to three strings representing vector, distance,k.
+                kStr = str.substr(0, distIndex - 1);
+                distStr = str.substr(distIndex, (endDistIndex - distIndex));
+                if (validDist(distStr))
+                {
+                    stringVect.push_back(distStr);
+                }
+                else
+                {
+                    string comment = "invalid";
+                    stringVect.push_back(comment);
+                }
+
+                
+                if (validK(kStr))
+                {
+                    stringVect.push_back(kStr);
+                }
+                else
+                {
+                    string comment = "invalid";
+                    stringVect.push_back(comment);
+                }
+            }
+        
+        return stringVect;
+    }
 }
 
-bool Validation::validFile(string path) {
+bool Validation::validFile(string path)
+{
     // Validate file before openning the server for clients
     ifstream inFile;
-        inFile.open(path);
-        if (!inFile.is_open())
-        { 
-            //cout << "error openning file" << std::endl;
-            return false;
-        }
-        inFile.close();
-        return true;
-    
-}
-
-bool Validation::existFiles(string file1, string file2){
-    if(!file1.size()){
+    inFile.open(path);
+    if (!inFile.is_open())
+    {
+        // cout << "error openning file" << std::endl;
         return false;
     }
-    if(!file2.size()){
+    inFile.close();
+    return true;
+}
+
+bool Validation::existFiles(string file1, string file2)
+{
+    if (!file1.size())
+    {
+        return false;
+    }
+    if (!file2.size())
+    {
         return false;
     }
     return true;

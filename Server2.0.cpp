@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 
             string str(buffer), vectorAsString, respon = "";
             
-            vector<string> strVect = valid.strToKDV(str);
+            vector<string> strVect = valid.strToKDV(str, 3);
             v.clear();
             dist.clear();
             kStr.clear();

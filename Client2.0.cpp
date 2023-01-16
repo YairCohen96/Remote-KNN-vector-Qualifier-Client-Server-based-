@@ -89,8 +89,25 @@ int main(int argc, char *argv[])
 
         // Send data to server
         string input;
+
+        const char *data = "\n"; // = "1 2 3 4 MAN 12";
         getline(cin, input);
-        const char *data = input.c_str();
+        if(!input.empty()) {
+        data = input.c_str();}
+        int data_len = strlen(data);
+        if (strcmp(data, "-1") == 0)
+        {
+            // Close socket
+            close(sock);
+            return 0;
+        }
+        int sent_bytes = send(sock, data, data_len, 0);
+        if (sent_bytes < 0)
+        {
+            perror("error sending data to server");
+            close(sock);
+            return 1;
+            }
         Validation validator;
         switch (input[0])
         {       
@@ -268,6 +285,7 @@ int main(int argc, char *argv[])
             default:
                 // code to execute if input starts with any other character
                 break;
+
         }
         // data = input.c_str();
         // int data_len = strlen(data);

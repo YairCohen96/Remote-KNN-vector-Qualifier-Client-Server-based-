@@ -26,8 +26,17 @@ protected:
     Validation validator;
     
 public:
-    virtual void execute() = 0;
+    virtual void execute() {} ;
     void setDio(DefaultIO* update) {dio = update;};
+    void setListeners (vector<Command> listen) {
+        int len = listen.size();
+        listeners.clear();
+        for (int i = 0; i < len; i++)
+        {
+            listeners.push_back(listen.at(i));
+        }
+        
+    }
 };
 
 

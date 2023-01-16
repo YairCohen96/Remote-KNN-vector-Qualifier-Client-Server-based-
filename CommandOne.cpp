@@ -17,8 +17,13 @@ void CommandOne::execute() {
     
     Command::dio->write("Please upload your local test CSV file.\n");
     string path_to_unclass = Command::dio->read();
+
+    if(!validator.validFile(path_to_unclass)) {
+        Command::dio->write("invalid input\n");
+
     if (path_to_unclass[0] == '1')
     {
+
         return;
     }
     
@@ -27,5 +32,9 @@ void CommandOne::execute() {
     //let all other commands know
     update_after_executed(my_data);
     //here we will forward the path to the server and make sure it can be opened - if not - need to change message!
+
+    Command::dio->write("upload complete.\n");
+
     //Command::dio->write("upload complete.");
+
 }

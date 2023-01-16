@@ -12,6 +12,7 @@ class Listener
 public:
     DataSet my_data;
     virtual void setData(DataSet data) { my_data = data; };
+
 };
 
 #endif

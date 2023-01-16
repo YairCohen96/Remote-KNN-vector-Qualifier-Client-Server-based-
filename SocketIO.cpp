@@ -22,6 +22,9 @@ string SocketIO::read()
     char buffer[4096] = "";
     // int n = read(client_sockfd, buffer, sizeof(buffer));
     int bytes_received = recv(client_sockfd, buffer, sizeof(buffer), 0);
+    if (buffer == "-2") {
+        return "";
+    }
     if (bytes_received == 0)
     {
         // Client has disconnected
