@@ -2,6 +2,10 @@
 
 using namespace std;
 
+/**
+ * execute - emplmntation of command header.
+*/
+
 void CommandTwo::execute() {
     Command::dio->write("The current KNN parameters are: K =  " + to_string(my_data.k) + ", distance metric  = " + my_data.distance + "\n");
     //TODO - recognize keyboard and current real k and dist on server. change them if needed and print message accordingly

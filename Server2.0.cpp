@@ -134,14 +134,14 @@ int main(int argc, char *argv[])
             }
             if (failedInPut)
             {
-                const char *response = "Invalid Input";
-                int bytes_sent = send(client_sockfd, response, strlen(response), 0);
-                if (bytes_sent == -1)
-                {
-                    std::cerr << "Error sending data to client" << std::endl;
-                    close(client_sockfd);
-                    continue;
-                }
+                // const char *response = "#####Invalid Input";
+                // int bytes_sent = send(client_sockfd, response, strlen(response), 0);
+                // if (bytes_sent == -1)
+                // {
+                //     std::cerr << "Error sending data to client" << std::endl;
+                //     close(client_sockfd);
+                //     continue;
+                // }
                 continue;
             }
             KnnCalc k(kNum, argv[1], dist); // argv[1] is the path to file from server arguments

@@ -11,6 +11,7 @@
 #include "StandardIO.h"
 #include "Command.h"
 #include "KnnCalc.h"
+
 using namespace std;
 class CommandThree : public Command
 {
