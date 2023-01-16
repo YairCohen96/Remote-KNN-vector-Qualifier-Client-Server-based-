@@ -85,9 +85,10 @@ int main(int argc, char *argv[])
         // cout << "please choose vector, distance, k";
         // Send data to server
         string input;
-        const char *data; // = "1 2 3 4 MAN 12";
+        const char *data = "\n"; // = "1 2 3 4 MAN 12";
         getline(cin, input);
-        data = input.c_str();
+        if(!input.empty()) {
+        data = input.c_str();}
         int data_len = strlen(data);
         if (strcmp(data, "-1") == 0)
         {

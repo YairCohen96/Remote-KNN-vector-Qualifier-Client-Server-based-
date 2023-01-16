@@ -20,7 +20,7 @@ using namespace std;
 class CLI
 {
 private:
-    //vector<Command> commands;
+    vector<Command> commands;
     DefaultIO *dio;
 
 public:

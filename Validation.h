@@ -24,7 +24,7 @@ public:
     bool validVDK(vector<string> strVectt);
     bool validVectorsCompare(vector<double> v1, vector<double> v2);
     bool validVectorAndType(string str);
-    vector<string> strToKDV(string str);
+    vector<string> strToKDV(string str, int assign);
     bool validFile(string path);
     bool existFiles(string file1, string file2);
 };
