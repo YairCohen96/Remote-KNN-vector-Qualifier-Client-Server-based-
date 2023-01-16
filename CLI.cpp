@@ -34,6 +34,7 @@ void CLI::start()
         else
         {
             int com = stoi(option) - 1;
+            one.setDio(dio);
             //commands.at(com).execute();
             one.execute();
         }
