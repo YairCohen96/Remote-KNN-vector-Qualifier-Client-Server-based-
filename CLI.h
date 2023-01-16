@@ -24,7 +24,7 @@ private:
     DefaultIO *dio;
 
 public:
-    CLI();
+    CLI(int client_sockfd);
     void start();
     
 };

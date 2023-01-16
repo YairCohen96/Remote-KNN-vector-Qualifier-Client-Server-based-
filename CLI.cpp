@@ -1,8 +1,8 @@
 #include "CLI.h"
 
 using namespace std;
-CLI::CLI() {
-    dio = new StandardIO();
+CLI::CLI(int client_sockfd) {
+    dio = new SocketIO(client_sockfd);
 }
 void CLI::start()
 {
@@ -14,9 +14,9 @@ void CLI::start()
     //commands.push_back(three);
     CommandFour four;
     //commands.push_back(four);
-    //Command five = CommandFive();
+    //CommandFive five;
     //commands.push_back(five);
-    //Command eight = CommandEight();
+    //CommandEight eight;
     //commands.push_back(eight);
     // here we will need to init all dio's to be the same socket-client
     // for now - init dio to standard
@@ -26,6 +26,9 @@ void CLI::start()
     //{
         dio->write(menu);
         string option = dio->read();
+        if(option.size() == 0) {
+            return;
+        }
         if (stoi(option) == 8)
         {
             //commands.at(5).execute(); // command eight

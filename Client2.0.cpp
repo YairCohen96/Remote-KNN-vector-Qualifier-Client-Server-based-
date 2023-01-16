@@ -59,28 +59,6 @@ int main(int argc, char *argv[])
     }
     while (true)
     {
-        // get: vector   distance    k
-        // cout << "please choose vector, distance, k";
-        // Send data to server
-        string input;
-        const char *data; // = "1 2 3 4 MAN 12";
-        getline(cin, input);
-        data = input.c_str();
-        int data_len = strlen(data);
-        if (strcmp(data, "-1") == 0)
-        {
-            // Close socket
-            close(sock);
-            return 0;
-        }
-        int sent_bytes = send(sock, data, data_len, 0);
-        if (sent_bytes < 0)
-        {
-            perror("error sending data to server");
-            close(sock);
-            return 1;
-        }
-
         // Receive data from server
         char buffer[4096];
         memset(buffer, 0, sizeof(buffer));
@@ -102,6 +80,27 @@ int main(int argc, char *argv[])
         else
         {
             std::cout << buffer << std::endl;
+        }
+        // get: vector   distance    k
+        // cout << "please choose vector, distance, k";
+        // Send data to server
+        string input;
+        const char *data; // = "1 2 3 4 MAN 12";
+        getline(cin, input);
+        data = input.c_str();
+        int data_len = strlen(data);
+        if (strcmp(data, "-1") == 0)
+        {
+            // Close socket
+            close(sock);
+            return 0;
+        }
+        int sent_bytes = send(sock, data, data_len, 0);
+        if (sent_bytes < 0)
+        {
+            perror("error sending data to server");
+            close(sock);
+            return 1;
         }
     }
     return 0;
