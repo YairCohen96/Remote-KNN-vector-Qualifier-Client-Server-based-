@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
         struct sockaddr_in client_addr;
         socklen_t client_addr_len = sizeof(client_addr);
         int client_sockfd = accept(sockfd, (struct sockaddr *)&client_addr, &client_addr_len);
-        
+
         if (client_sockfd == -1)
         {
             std::cerr << "Error accepting connection" << std::endl;
@@ -90,12 +90,15 @@ int main(int argc, char *argv[])
         }
         while (true)
         {
+            //const char *response1 = "hello\n";
+            //int bytes_sent1 = send(client_sockfd, response1, strlen(response1), 0);
+                
             
-            CLI cli;
+            CLI cli(client_sockfd);
             cli.start();
             // Process the client's request
             char buffer[4096] = "";
-            // int n = read(client_sockfd, buffer, sizeof(buffer));
+            /* int n = read(client_sockfd, buffer, sizeof(buffer));
             int bytes_received = recv(client_sockfd, buffer, sizeof(buffer), 0);
             if (bytes_received == 0)
             {
@@ -110,7 +113,7 @@ int main(int argc, char *argv[])
                 close(client_sockfd);
                 // continue;
                 break;
-            }
+            }*/
 
             string str(buffer), vectorAsString, respon = "";
             
