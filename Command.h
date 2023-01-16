@@ -22,11 +22,11 @@ protected:
     //description will change only if command is valid
     string description;
     //will be changed to socket only by a client approach
-    DefaultIO dio = StandardIO();
+    DefaultIO* dio;
     Validation validator;
     
 public:
-    virtual void execute() {};
+    virtual void execute() = 0;
 };
 
 

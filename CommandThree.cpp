@@ -5,7 +5,7 @@ using namespace std;
 void CommandThree::execute() {
     //check avalability for runchecking if not exist print "data upload please."
     if(!validator.existFiles(my_data.unclass_path, my_data.class_path)){
-        Command::dio.write("please upload data.\n");
+        Command::dio->write("please upload data.\n");
     }
     //run the check and when finish write "complete data classifying"
     else {
@@ -41,6 +41,6 @@ void CommandThree::execute() {
         }
         my_data.set_results(runCheck);
         update_after_executed(my_data);
-        Command::dio.write("classifying data complete\n");
+        Command::dio->write("classifying data complete\n");
     }
 }

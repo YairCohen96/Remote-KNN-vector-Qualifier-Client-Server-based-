@@ -9,6 +9,7 @@
 #include "KnnCalc.h"
 #include "DistanceCalc.h"
 #include "Validation.h"
+#include "CLI.h"
 
 /**
  * main -  generate the server main .
@@ -81,6 +82,7 @@ int main(int argc, char *argv[])
         struct sockaddr_in client_addr;
         socklen_t client_addr_len = sizeof(client_addr);
         int client_sockfd = accept(sockfd, (struct sockaddr *)&client_addr, &client_addr_len);
+        
         if (client_sockfd == -1)
         {
             std::cerr << "Error accepting connection" << std::endl;
@@ -88,7 +90,9 @@ int main(int argc, char *argv[])
         }
         while (true)
         {
-
+            
+            CLI cli;
+            cli.start();
             // Process the client's request
             char buffer[4096] = "";
             // int n = read(client_sockfd, buffer, sizeof(buffer));
