@@ -7,12 +7,19 @@
 #include <string>
 #include <iostream>
 #include "DefaultIO.h"
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <unistd.h>
+
 
 using namespace std;
-class socketIO : public DefaultIO
+class SocketIO : public DefaultIO
 {
 private:
+    int client_sockfd;
 public:
+    SocketIO(int client_sockfd);
     string read() override;
     void write(string text) override;
 };

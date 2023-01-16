@@ -17,7 +17,9 @@
                 "${fileDirname}/CommandTwo.cpp",
                 "${fileDirname}/CommandThree.cpp",
                 "${fileDirname}/CommandFour.cpp",
-                "${fileDirname}/StandardIO.cpp"
+                "${fileDirname}/StandardIO.cpp",
+                "${fileDirname}/CLI.cpp" ,
+                "${fileDirname}/SocketIO.cpp" 
             ],
             "options": {
                 "cwd": "${fileDirname}"

@@ -13,8 +13,8 @@ private:
     
     
 public:
-    virtual void write(string text);
-    virtual string read();
+    virtual void write(string text) = 0;
+    virtual string read() = 0;
     
 };
 
