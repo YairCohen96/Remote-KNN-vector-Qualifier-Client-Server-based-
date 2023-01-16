@@ -3,10 +3,10 @@
 using namespace std;
 
 void CommandOne::execute() {
-    Command::dio->write("Please upload your local train CSV file.");
+    Command::dio->write("Please upload your local train CSV file.\n");
     string path_to_class = Command::dio->read();
     if(!validator.validFile(path_to_class)) {
-        Command::dio->write("invalid input");
+        Command::dio->write("invalid input\n");
         return;
     }
     my_data.set_class(path_to_class);

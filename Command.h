@@ -27,6 +27,7 @@ protected:
     
 public:
     virtual void execute() = 0;
+    void setDio(DefaultIO* update) {dio = update;};
 };
 
 
