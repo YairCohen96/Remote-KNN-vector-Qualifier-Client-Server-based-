@@ -270,8 +270,9 @@ int main(int argc, char *argv[])
                 }
                 //2 lines up:put here a validator so send -1 if it not change (pressed enter or not valid and printed not valid)
                 break;
-            case '3':
+            case '3': {            
                 SocketIO socket(sock);
+   
                 // code to execute for input starting with 3
                 if(true){
                 //send the input string ('3')
@@ -294,23 +295,24 @@ int main(int argc, char *argv[])
 
                     //open first and send line by line. in commandThree- put in vector <pair <vector<double>, string>>
                     ifstream in_file(classify);
+                    string ans;
                     while (getline(in_file, input)) {
                         socket.write(input);
-                        string ans = socket.read();
+                        ans = socket.read();
                     }
                     socket.write("f");
-                    string ans = socket.read();
+                    ans = socket.read();
                     in_file.close();
 
                     //open second and send line by line. in commandThree- classify the line and save in results.
-                    ifstream in_file(unClassify);
-                    while (getline(in_file, input)) {
+                    ifstream in_file1(unClassify);
+                    while (getline(in_file1, input)) {
                         socket.write(input);
-                        string ans = socket.read();
+                        ans = socket.read();
                     }
                     socket.write("f");
-                    string ans = socket.read();
-                    in_file.close();
+                    ans = socket.read();
+                    in_file1.close();
 
                     //notify "classifying data complete."
                     cout << ans;
@@ -319,7 +321,7 @@ int main(int argc, char *argv[])
                 }               
                 }
                 //need to return to 
-                break;
+                break;}
             case '4':
                 // code to execute for input starting with 4
                 if (true) {
@@ -349,7 +351,7 @@ int main(int argc, char *argv[])
                     //read all of the results.
                     do{
                         //need to send data so return to place where server send result and client listen.
-                        int sent_bytes = send(sock, data, strlen(data), 0);
+                        sent_bytes = send(sock, data, strlen(data), 0);
                         if (sent_bytes < 0)
                         {
                             perror("error sending data to server");
@@ -358,7 +360,7 @@ int main(int argc, char *argv[])
                         }
                         //read result line.
                         char buffer2[4096] = "";
-                        int read_bytes = recv(sock, buffer2, expected_data_len, 0);
+                        read_bytes = recv(sock, buffer2, expected_data_len, 0);
                         if (read_bytes == 0){
                             std::cout << "connection closed by server" << std::endl;
                             close(sock);
@@ -375,7 +377,7 @@ int main(int argc, char *argv[])
                 //wait to user press enter.
                 getline(cin, input);
                 //need to send data so return to place where server send result and client listen.
-                int sent_bytes = send(sock, data, strlen(data), 0);
+                sent_bytes = send(sock, data, strlen(data), 0);
                 if (sent_bytes < 0)
                 {
                     perror("error sending data to server");
@@ -466,7 +468,7 @@ int main(int argc, char *argv[])
                 //wait to user press enter.
                 getline(cin, input);
                 //need to send data so return to place where server send result and client listen.
-                int sent_bytes = send(sock, data, strlen(data), 0);
+                sent_bytes = send(sock, data, strlen(data), 0);
                 if (sent_bytes < 0)
                 {
                     perror("error sending data to server");
@@ -484,7 +486,7 @@ int main(int argc, char *argv[])
                 break;
 
             // print server message:succes/failed
-            std::cout << defBuffer;
+            //std::cout << defBuffer;
             break;
         }
         // data = input.c_str();
