@@ -10,8 +10,8 @@ using namespace std;
 
 void CommandThree::execute() {
     //check avalability for runchecking if not exist print "data upload please."
-    DataSet mine = my_data;
-    if(!validator.existFiles(my_data.unclass_path, my_data.class_path)){
+    //DataSet mine = my_data;
+    if(!validator.existFiles(my_data->unclass_path, my_data->class_path)){
         Command::dio->write("0");
         string retToMen = Command::dio->read();
     }
@@ -19,10 +19,10 @@ void CommandThree::execute() {
     else {
         string retToWriteing;
         //first sent classify path.
-        Command::dio->write(my_data.class_path);
+        Command::dio->write(my_data->class_path);
         retToWriteing = Command::dio->read();
         //second sent unclassify path.
-        Command::dio->write(my_data.unclass_path);
+        Command::dio->write(my_data->unclass_path);
         string classVect =  Command::dio->read();
         
         //get all classify vectors as: string from client as vector and type and save as pair of vector and type.
@@ -40,7 +40,7 @@ void CommandThree::execute() {
         }
         out_file.close();
 
-        KnnCalc knn(my_data.k, "classify.txt", my_data.distance);
+        KnnCalc knn(my_data->k, "classify.txt", my_data->distance);
 
         //get all unclass vectors as: string with only vector.and classify each one and save in the result.
         int counter = 0;
@@ -67,8 +67,8 @@ void CommandThree::execute() {
         }
 
         //set result:
-        my_data.set_results(runCheck);
-        update_after_executed(my_data);
+        my_data->set_results(runCheck);
+        //update_after_executed(my_data);
 
         //send finish
         Command::dio->write("classifying data complete\n");

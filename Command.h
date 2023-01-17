@@ -7,15 +7,14 @@
 #include <string>
 #include <iostream>
 #include "Listener.h"
-#include "Notifier.h"
 #include "Validation.h"
 #include "DefaultIO.h"
 #include "SocketIO.h"
 #include "StandardIO.h"
 
 using namespace std;
-//inherate two interfaces - listener and notifier
-class Command : public Notifier, public Listener{
+//inherate interface - listener
+class Command : public Listener{
 protected:
     
     //to hold a list of listeners.
@@ -28,7 +27,7 @@ protected:
 public:
     virtual void execute() {} ;
     void setDio(DefaultIO* update) {dio = update;};
-    void setListeners (vector<Command> listen) {
+    /*void setListeners (vector<Command> listen) {
         int len = listen.size();
         listeners.clear();
         for (int i = 0; i < len; i++)
@@ -36,7 +35,7 @@ public:
             listeners.push_back(listen.at(i));
         }
         
-    }
+    }*/
 };
 
 

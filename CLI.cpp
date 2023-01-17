@@ -18,24 +18,30 @@ CLI::CLI(int client_sockfd)
  */
 void CLI::start()
 {
+    DataSet *data = new DataSet();
     CommandOne one;
-    commands.push_back(one);
+    one.setData(data);
+    //commands.push_back(one);
     CommandTwo two;
-    commands.push_back(two);
+    two.setData(data);
+    //commands.push_back(two);
     CommandThree three;
-    commands.push_back(three);
+    three.setData(data);
+    //commands.push_back(three);
     CommandFour four;
-    commands.push_back(four);
-    // CommandFive five;
-    // commands.push_back(five);
+    four.setData(data);
+    //commands.push_back(four);
+    //CommandFive five;
+    //five.setData(data);
+    //commands.push_back(five);
     // CommandEight eight;
     // commands.push_back(eight);
     //  here we will need to init all dio's to be the same socket-client
     //  for now - init dio to standard
-    one.setListeners(commands);
+    /*one.setListeners(commands);
     two.setListeners(commands);
     three.setListeners(commands);
-    four.setListeners(commands);
+    four.setListeners(commands);*/
     string menu = "Welcome to KNN Classifier Server. Please choose an option:\n1. upload an unclassified csv data file\n2. algorithm settings\n3. classify data\n4. display results\n5. download results\n8. exit\n";
 
     while (true)
@@ -51,7 +57,8 @@ void CLI::start()
         {
             opt = stoi(option);
         }
-        catch (exception e) {
+        catch (exception e)
+        {
             dio->write("invalid option.\n");
             continue;
         }
@@ -74,10 +81,10 @@ void CLI::start()
             four.setDio(dio);
             four.execute();
             break;
-            /*case 5:
-                five.setDio(dio);
-                five.execute();
-                break;*/
+        /*case 5:
+            five.setDio(dio);
+            five.execute();
+            break;*/
         case 8:
             return;
         default:

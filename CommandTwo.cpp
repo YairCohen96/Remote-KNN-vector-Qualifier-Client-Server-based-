@@ -7,7 +7,7 @@ using namespace std;
 */
 
 void CommandTwo::execute() {
-    Command::dio->write("The current KNN parameters are: K =  " + to_string(my_data.k) + ", distance metric  = " + my_data.distance + "\n");
+    Command::dio->write("The current KNN parameters are: K =  " + to_string(my_data->k) + ", distance metric  = " + my_data->distance + "\n");
     //TODO - recognize keyboard and current real k and dist on server. change them if needed and print message accordingly
     // get ENTER or new K and DISTANCE from user:
     string update = Command::dio->read();
@@ -30,8 +30,8 @@ void CommandTwo::execute() {
         if (kFlag || distFlag) {
             return;
         }
-        my_data.setK(stoi(dk.at(1)));
-        my_data.set_distance(dk.at(0));
-        update_after_executed(my_data);
+        my_data->setK(stoi(dk.at(1)));
+        my_data->set_distance(dk.at(0));
+        //update_after_executed(my_data);
     }
 }

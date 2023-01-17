@@ -10,7 +10,7 @@
 #include "CommandTwo.h"
 #include "CommandThree.h"
 #include "CommandFour.h"
-//#include "CommandFive.h"
+#include "CommandFive.h"
 //#include "CommandEight.h"
 #include <string>
 

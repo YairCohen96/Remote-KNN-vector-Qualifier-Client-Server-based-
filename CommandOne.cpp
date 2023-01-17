@@ -29,10 +29,11 @@ void CommandOne::execute()
         return;
     }
 
-    my_data.set_class(path_to_class);
-    my_data.set_unclass(path_to_unclass);
+    
+    my_data->set_class(path_to_class);
+    my_data->set_unclass(path_to_unclass);
     // let all other commands know
-    update_after_executed(my_data);
+    //update_after_executed(my_data);
     // here we will forward the path to the server and make sure it can be opened - if not - need to change message!
 
     //Command::dio->write("upload complete.\n");
