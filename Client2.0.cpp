@@ -10,6 +10,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include "Validation.h"
+#include "SocketIO.h"
+
 using namespace std;
 
 /**
@@ -248,29 +250,52 @@ int main(int argc, char *argv[])
                 //2 lines up:put here a validator so send -1 if it not change (pressed enter or not valid and printed not valid)
                 break;
             case '3':
+                SocketIO socket(sock);
                 // code to execute for input starting with 3
                 if(true){
-                //send the input string 
-                int sent_bytes = send(sock, data, strlen(data), 0);
-                if (sent_bytes < 0)
-                {
-                    perror("error sending data to server");
-                    close(sock);
-                    return 1;
-                }
+                //send the input string ('3')
+                socket.write(input);
                 
-                //recive from server message with succes or failure.
-                int read_bytes = recv(sock, buffer, expected_data_len, 0);
-                if (read_bytes == 0)
-                {
-                    std::cout << "connection closed by server" << std::endl;
-                    close(sock);
-                    return 1;
-                }
-                
-                //print server message:succes/failed
-                std::cout << buffer;
-                
+                //get first path:
+                string classify = socket.read();
+                 //send to server so server will send in future the menu. or the second path
+                socket.write(" ");
+                //if returned "0" there is no path
+                if (classify[0] == '0' && classify.size() == 1){
+                    cout << "please upload data.\n";                   
+                } else {
+                    //get second path
+                    string unClassify = socket.read();
+                    //dont send blank !!
+
+                    //check if there is path???
+
+
+                    //open first and send line by line. in commandThree- put in vector <pair <vector<double>, string>>
+                    ifstream in_file(classify);
+                    while (getline(in_file, input)) {
+                        socket.write(input);
+                        string ans = socket.read();
+                    }
+                    socket.write("f");
+                    string ans = socket.read();
+                    in_file.close();
+
+                    //open second and send line by line. in commandThree- classify the line and save in results.
+                    ifstream in_file(unClassify);
+                    while (getline(in_file, input)) {
+                        socket.write(input);
+                        string ans = socket.read();
+                    }
+                    socket.write("f");
+                    string ans = socket.read();
+                    in_file.close();
+
+                    //notify "classifying data complete."
+                    cout << ans;
+                    socket.write(" ");
+
+                }               
                 }
                 //need to return to 
                 break;

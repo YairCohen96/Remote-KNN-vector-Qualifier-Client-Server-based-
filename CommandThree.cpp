@@ -1,4 +1,6 @@
 #include "CommandThree.h"
+#include <filesystem>
+#include <cstdio>
 
 using namespace std;
 
@@ -9,27 +11,46 @@ using namespace std;
 void CommandThree::execute() {
     //check avalability for runchecking if not exist print "data upload please."
     if(!validator.existFiles(my_data.unclass_path, my_data.class_path)){
-        Command::dio->write("please upload data.\n");
+        Command::dio->write("0");
+        string retToMen = Command::dio->read();
     }
     //run the check and when finish write "complete data classifying"
     else {
-        KnnCalc knn(my_data.k, my_data.class_path, my_data.distance);
-        ifstream inFile;
-        inFile.open(my_data.unclass_path);
-        if (!inFile.is_open())
-        { 
-            // error openning file
-            return;
-        }
+        string retToWriteing;
+        //first sent classify path.
+        Command::dio->write(my_data.class_path);
+        retToWriteing = Command::dio->read();
+        //second sent unclassify path.
+        Command::dio->write(my_data.unclass_path);
+        string classVect =  Command::dio->read();
         
-        string s;
+        //get all classify vectors as: string from client as vector and type and save as pair of vector and type.
+        //"f" notify endof clasiffy
+        
+        //vector <pair<vector<double>, string>> classVectorsVect;
+        
+        ofstream out_file;
+        out_file.open("classify.txt");
+        
+        while(classVect[0] != 'f'){
+            out_file << classVect;
+            Command::dio->write(" ");
+            string classVect =  Command::dio->read();
+        }
+        out_file.close();
+
+        KnnCalc knn(my_data.k, "classify.txt", my_data.distance);
+
+        //get all unclass vectors as: string with only vector.and classify each one and save in the result.
         int counter = 0;
         //result vector.
         vector<pair<double, string>> runCheck;
-        while (getline(inFile, s))
+        Command::dio->write(" ");
+        string classVect =  Command::dio->read();
+        while (classVect[0] != 'f')
         {
             ++counter;
-            vector<double>  vectorFromFile = knn.getVTFromCSVLine(s).first;
+            vector<double>  vectorFromFile = knn.getVTFromCSVLine(classVect).first;
             pair<double, string> currentVectType;
             currentVectType.first = counter;
             knn.getCalc().setV1(vectorFromFile);
@@ -43,8 +64,23 @@ void CommandThree::execute() {
                runCheck.push_back(currentVectType) ;
             }
         }
+
+        //set result:
         my_data.set_results(runCheck);
         update_after_executed(my_data);
+
+        //send finish
         Command::dio->write("classifying data complete\n");
+        string classVect =  Command::dio->read();
+
+        remove("classify.txt");
+
+        /**
+         * what if failed in middle?:
+         * the files wasnt good(we check only opening)...
+         * 
+         */
+
+        
     }
 }
