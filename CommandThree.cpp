@@ -10,6 +10,7 @@ using namespace std;
 
 void CommandThree::execute() {
     //check avalability for runchecking if not exist print "data upload please."
+    DataSet mine = my_data;
     if(!validator.existFiles(my_data.unclass_path, my_data.class_path)){
         Command::dio->write("0");
         string retToMen = Command::dio->read();
@@ -35,7 +36,7 @@ void CommandThree::execute() {
         while(classVect[0] != 'f'){
             out_file << classVect;
             Command::dio->write(" ");
-            string classVect =  Command::dio->read();
+            classVect =  Command::dio->read();
         }
         out_file.close();
 
@@ -46,7 +47,7 @@ void CommandThree::execute() {
         //result vector.
         vector<pair<double, string>> runCheck;
         Command::dio->write(" ");
-        string classVect =  Command::dio->read();
+        classVect =  Command::dio->read();
         while (classVect[0] != 'f')
         {
             ++counter;
@@ -71,7 +72,7 @@ void CommandThree::execute() {
 
         //send finish
         Command::dio->write("classifying data complete\n");
-        string classVect =  Command::dio->read();
+        string backToMain =  Command::dio->read();
 
         remove("classify.txt");
 
