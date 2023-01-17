@@ -21,27 +21,30 @@ void CLI::start()
     DataSet *data = new DataSet();
     CommandOne one;
     one.setData(data);
-    //commands.push_back(one);
     CommandTwo two;
     two.setData(data);
-    //commands.push_back(two);
     CommandThree three;
-    three.setData(data);
-    //commands.push_back(three);
+    three.setData(data);   
     CommandFour four;
     four.setData(data);
-    //commands.push_back(four);
-    //CommandFive five;
-    //five.setData(data);
-    //commands.push_back(five);
+    CommandFive five;
+    five.setData(data);
     // CommandEight eight;
+    // eight.setData(data);
+    //commands.push_back(one);
+    //commands.push_back(two);
+    //commands.push_back(three);
+    //commands.push_back(four);
+    //commands.push_back(five);
     // commands.push_back(eight);
+
     //  here we will need to init all dio's to be the same socket-client
     //  for now - init dio to standard
     /*one.setListeners(commands);
     two.setListeners(commands);
     three.setListeners(commands);
     four.setListeners(commands);*/
+    
     string menu = "Welcome to KNN Classifier Server. Please choose an option:\n1. upload an unclassified csv data file\n2. algorithm settings\n3. classify data\n4. display results\n5. download results\n8. exit\n";
 
     while (true)
@@ -81,10 +84,10 @@ void CLI::start()
             four.setDio(dio);
             four.execute();
             break;
-        /*case 5:
+        case 5:
             five.setDio(dio);
             five.execute();
-            break;*/
+            break;
         case 8:
             return;
         default:

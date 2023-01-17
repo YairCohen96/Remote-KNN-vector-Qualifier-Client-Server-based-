@@ -299,6 +299,7 @@ int main(int argc, char *argv[])
                 if (ans[0] == 'p')
                 {
                     std::cout << ans;
+                    socket.write(" ");
                 } else {
                     //add thread
 
@@ -349,6 +350,7 @@ int main(int argc, char *argv[])
                 break;
             default:
                 // code to execute if input starts with any other character
+                socket.write("6");
                 break;
 
             // print server message:succes/failed

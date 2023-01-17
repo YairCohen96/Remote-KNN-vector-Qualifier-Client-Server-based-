@@ -34,7 +34,7 @@ void CommandThree::execute() {
         out_file.open("classify.txt");
         
         while(classVect[0] != 'f'){
-            out_file << classVect;
+            out_file << classVect << endl;
             Command::dio->write(" ");
             classVect =  Command::dio->read();
         }
