@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string.h>
+#include <fstream>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -9,6 +10,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include "Validation.h"
+#include "SocketIO.h"
+
 using namespace std;
 
 /**
@@ -247,9 +250,59 @@ int main(int argc, char *argv[])
                 //2 lines up:put here a validator so send -1 if it not change (pressed enter or not valid and printed not valid)
                 break;
             case '3':
+                SocketIO socket(sock);
                 // code to execute for input starting with 3
                 if(true){
-                //send the input string 
+                //send the input string ('3')
+                socket.write(input);
+                
+                //get first path:
+                string classify = socket.read();
+                 //send to server so server will send in future the menu. or the second path
+                socket.write(" ");
+                //if returned "0" there is no path
+                if (classify[0] == '0' && classify.size() == 1){
+                    cout << "please upload data.\n";                   
+                } else {
+                    //get second path
+                    string unClassify = socket.read();
+                    //dont send blank !!
+
+                    //check if there is path???
+
+
+                    //open first and send line by line. in commandThree- put in vector <pair <vector<double>, string>>
+                    ifstream in_file(classify);
+                    while (getline(in_file, input)) {
+                        socket.write(input);
+                        string ans = socket.read();
+                    }
+                    socket.write("f");
+                    string ans = socket.read();
+                    in_file.close();
+
+                    //open second and send line by line. in commandThree- classify the line and save in results.
+                    ifstream in_file(unClassify);
+                    while (getline(in_file, input)) {
+                        socket.write(input);
+                        string ans = socket.read();
+                    }
+                    socket.write("f");
+                    string ans = socket.read();
+                    in_file.close();
+
+                    //notify "classifying data complete."
+                    cout << ans;
+                    socket.write(" ");
+
+                }               
+                }
+                //need to return to 
+                break;
+            case '4':
+                // code to execute for input starting with 4
+                if (true) {
+                //send the input string ('4') 
                 int sent_bytes = send(sock, data, strlen(data), 0);
                 if (sent_bytes < 0)
                 {
@@ -258,26 +311,149 @@ int main(int argc, char *argv[])
                     return 1;
                 }
                 
-                //recive from server message with succes or failure.
-                int read_bytes = recv(sock, buffer, expected_data_len, 0);
+                //recive from server message with please upload/classify or start get the results.
+                char buffer1[4096] = "";
+                int read_bytes = recv(sock, buffer1, expected_data_len, 0);
                 if (read_bytes == 0)
                 {
                     std::cout << "connection closed by server" << std::endl;
                     close(sock);
                     return 1;
                 }
-                
-                //print server message:succes/failed
-                std::cout << buffer;
-                
+                //print server message:"please upload/classify or first result"
+                std::cout << buffer1;
+                //check if the buffer1 contain result.
+                if (buffer1[0] != 'p' || buffer1[0] != 'd'){
+                    bool loop = true;
+                    //read all of the results.
+                    do{
+                        //need to send data so return to place where server send result and client listen.
+                        int sent_bytes = send(sock, data, strlen(data), 0);
+                        if (sent_bytes < 0)
+                        {
+                            perror("error sending data to server");
+                            close(sock);
+                            return 1;
+                        }
+                        //read result line.
+                        char buffer2[4096] = "";
+                        int read_bytes = recv(sock, buffer2, expected_data_len, 0);
+                        if (read_bytes == 0){
+                            std::cout << "connection closed by server" << std::endl;
+                            close(sock);
+                            return 1;
+                        }
+                        //print server message:"please upload/classify or first result"
+                        std::cout << buffer2;
+                        if (buffer2[0] == 'd') {
+                            loop = false;
+                        } 
+                    } while (loop);
+                    
+                } 
+                //wait to user press enter.
+                getline(cin, input);
+                //need to send data so return to place where server send result and client listen.
+                int sent_bytes = send(sock, data, strlen(data), 0);
+                if (sent_bytes < 0)
+                {
+                    perror("error sending data to server");
+                    close(sock);
+                    return 1;
                 }
-                //need to return to 
-                break;
-            case '4':
-                // code to execute for input starting with 4
+                }
                 break;
             case '5':
                 // code to execute for input starting with 5
+                if (true){
+                //send the input string ('5') 
+                int sent_bytes = send(sock, data, strlen(data), 0);
+                if (sent_bytes < 0)
+                {
+                    perror("error sending data to server");
+                    close(sock);
+                    return 1;
+                }
+                
+                //recive from server message with please upload/classify or start get the results.
+                char buffer1[4096] = "";
+                int read_bytes = recv(sock, buffer1, expected_data_len, 0);
+                if (read_bytes == 0)
+                {
+                    std::cout << "connection closed by server" << std::endl;
+                    close(sock);
+                    return 1;
+                }
+                //print server message:"please upload/classify or first result"
+                if (buffer1[0] == 'p')
+                {
+                    std::cout << buffer1;
+                } else {
+                    //add thread
+
+                    //not sure this message need to shown.
+                    cout << "please upload path to save the results.\n";
+                    getline(cin, input);
+                    //ifstream inFile;
+                    ofstream outFile;
+                    outFile.open(input, std::ios::app); // open file in append mode
+                    if (!outFile.is_open())
+                    {
+                            cout << "error opening file.\n";
+                            //need to send data so return to place where server send result and client listen.
+                            int sent_bytes = send(sock, data, strlen(data), 0);
+                            if (sent_bytes < 0)
+                            {
+                                perror("error sending data to server");
+                                close(sock);
+                                return 1;
+                            }
+                    }else{
+                        //if buffer1[0] != p print in the file
+                        outFile << buffer1; // write line to file
+                        //start writeing to file the results.
+                        bool loop = true;
+                        do{
+                            //need to send data so return to place where server send result and client listen.
+                            int sent_bytes = send(sock, data, strlen(data), 0);
+                            if (sent_bytes < 0)
+                            {
+                                perror("error sending data to server");
+                                close(sock);
+                                return 1;
+                            }
+                            //read result line.
+                            char buffer2[4096] = "";
+                            int read_bytes = recv(sock, buffer2, expected_data_len, 0);
+                            if (read_bytes == 0){
+                                std::cout << "connection closed by server" << std::endl;
+                                close(sock);
+                                return 1;
+                            }
+                            //print server message:"please upload/classify or first result"
+                            outFile << buffer2;
+                            if (buffer2[0] == 'd') {
+                                loop = false;
+                            } 
+                        } while (loop);
+                        
+                        
+                        outFile.close(); // close file
+                    }
+   
+                }
+                //wait to user press enter.
+                getline(cin, input);
+                //need to send data so return to place where server send result and client listen.
+                int sent_bytes = send(sock, data, strlen(data), 0);
+                if (sent_bytes < 0)
+                {
+                    perror("error sending data to server");
+                    close(sock);
+                    return 1;
+                }
+                }
+                
                 break;
             case '8':
                 // code to execute for input starting with 8
