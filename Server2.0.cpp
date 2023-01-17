@@ -52,11 +52,11 @@ int main(int argc, char *argv[])
             return 1;
         }
         inFile.close();*/
-    if (!valid.validFile(argv[1]))
-    {
-        cout << "error openning file" << std::endl;
-        return 1;
-    }
+    // if (!valid.validFile(argv[1]))
+    // {
+    //     cout << "error openning file" << std::endl;
+    //     return 1;
+    // }
 
     struct sockaddr_in sa;
     // Create the socket
