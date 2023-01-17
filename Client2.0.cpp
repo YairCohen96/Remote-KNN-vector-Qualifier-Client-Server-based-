@@ -68,27 +68,29 @@ int main(int argc, char *argv[])
     }
     while (true)
     {
+        SocketIO socket(sock);
         // Receive data from server
-        char buffer[4096];
-        memset(buffer, 0, sizeof(buffer));
-        int expected_data_len = sizeof(buffer);
-        int read_bytes = recv(sock, buffer, expected_data_len, 0);
-        if (read_bytes == 0)
-        {
-            std::cout << "connection closed by server" << std::endl;
-            close(sock);
-            return 1;
-        }
-        else if (read_bytes < 0)
-        {
-            perror("error receiving data from server");
-            close(sock);
-            return 1;
-        }
-        else
-        {
-            std::cout << buffer; //<< std::endl
-        }
+        // char buffer[4096];
+        // memset(buffer, 0, sizeof(buffer));
+        // int expected_data_len = sizeof(buffer);
+        // int read_bytes = recv(sock, buffer, expected_data_len, 0);
+        // if (read_bytes == 0)
+        // {
+        //     std::cout << "connection closed by server" << std::endl;
+        //     close(sock);
+        //     return 1;
+        // }
+        // else if (read_bytes < 0)
+        // {
+        //     perror("error receiving data from server");
+        //     close(sock);
+        //     return 1;
+        // }
+        string ans = socket.read();
+        // else
+        // {
+        std::cout << ans; //<< std::endl buffer
+        //}
 
         // Send data to server
         string input;
@@ -106,173 +108,100 @@ int main(int argc, char *argv[])
             close(sock);
             return 0;
         }
-        /*int sent_bytes = send(sock, data, data_len, 0);
-        if (sent_bytes < 0)
-        {
-            perror("error sending data to server");
-            close(sock);
-            return 1;
-            }*/
         Validation validator;
         switch (input[0])
         {
-        case '1':
-            // code to execute for input starting with 1
-            if (true)
-            {
-
-                // send the input string
-                int sent_bytes = send(sock, data, strlen(data), 0);
-                if (sent_bytes < 0)
+            case '1':
+                // code to execute for input starting with 1
+                if (true)
                 {
-                    perror("error sending data to server");
-                    close(sock);
-                    return 1;
-                }
 
-                // recive from server message for enter train csv
-                char buffer1[4096] = "";
-                read_bytes = recv(sock, buffer1, expected_data_len, 0);
-                if (read_bytes == 0)
-                {
-                    std::cout << "connection closed by server" << std::endl;
-                    close(sock);
-                    return 1;
-                }
-
-                // print server message:"Please upload your local train CSV file.""
-                std::cout << buffer1;
-                // get file path from user.
-
-                getline(cin, input);
-                // check if it is a file.
-                if (!validator.validFile(input))
-                {
                     // send the input string
-                    string notValid = "1";
-                    int sent_bytes = send(sock, notValid.c_str(), notValid.size(), 0);
-                    if (sent_bytes < 0)
+                    socket.write(data);
+                    // recive from server message for enter train csv                   
+                    ans = socket.read();
+
+                    // print server message:"Please upload your local train CSV file.""
+                    std::cout << ans;
+                    // get file path from user.
+
+                    getline(cin, input);
+                    // check if it is a file.
+                    if (!validator.validFile(input))
                     {
-                        perror("error sending data to server");
-                        close(sock);
-                        return 1;
-                    }
-                    cout << "invalid input\n";
-                    break;
-                }
+                        // send the input string
+                        string notValid = "1";
+                        socket.write(notValid);
 
-                // set the sending data as the first file path
-                data = "\n";
-                if (!input.empty())
-                {
-                    data = input.c_str();
-                }
-
-                sent_bytes = send(sock, data, strlen(data), 0);
-                if (sent_bytes < 0)
-                {
-                    perror("error sending data to server");
-                    close(sock);
-                    return 1;
-                }
-
-                // the second file:
-                // recive from server message for enter test csv and if upload complete in same message.
-                char buffer2[4096] = "";
-                int read_bytes = recv(sock, buffer2, expected_data_len, 0);
-                if (read_bytes == 0)
-                {
-                    std::cout << "connection closed by server" << std::endl;
-                    close(sock);
-                    return 1;
-                }
-
-                // print server message:"Please upload your local train CSV file.""
-                std::cout << buffer2;
-                // get second file path from user.
-                getline(cin, input);
-                // check if it is a file.
-                if (!validator.validFile(input))
-                {
-                    // send the input string
-                    string notValid = "1";
-                    int sent_bytes = send(sock, notValid.c_str(), notValid.size(), 0);
-                    if (sent_bytes < 0)
-                    {
-                        perror("error sending data to server");
-                        close(sock);
-                        return 1;
+                        cout << "invalid input\n";
+                        break;
                     }
 
-                    cout << "invalid input\n";
-                    break;
-                }
+                    // set the sending data as the first file path
+                    data = "\n";
+                    if (!input.empty())
+                    {
+                        data = input.c_str();
+                    }
+                    socket.write(data);
+                    
+                    // the second file:
+                    // recive from server message for enter test csv and if upload complete in same message.
+                    ans = socket.read();
 
-                // set the sending data as the second file path
-                data = "\n";
-                if (!input.empty())
-                {
-                    data = input.c_str();
-                }
-                sent_bytes = send(sock, data, strlen(data), 0);
-                if (sent_bytes < 0)
-                {
-                    perror("error sending data to server");
-                    close(sock);
-                    return 1;
-                }
-                cout << "upload complete.\n";
-                // in the end the server need to send upload complete and the menu together.
-            }
-            break;
-        case '2':
-            // code to execute for input starting with 2
-            if (true)
-            {
-                // send the input string
-                int sent_bytes = send(sock, data, strlen(data), 0);
-                if (sent_bytes < 0)
-                {
-                    perror("error sending data to server");
-                    close(sock);
-                    return 1;
-                }
-                char buffer3[4096] = "";
-                // recive from server message with the existing k and dist
-                int read_bytes = recv(sock, buffer3, expected_data_len, 0);
-                if (read_bytes == 0)
-                {
-                    std::cout << "connection closed by server" << std::endl;
-                    close(sock);
-                    return 1;
-                }
+                    // print server message:"Please upload your local train CSV file.""
+                    std::cout << ans;
+                    // get second file path from user.
+                    getline(cin, input);
+                    // check if it is a file.
+                    if (!validator.validFile(input))
+                    {
+                        // send the input string
+                        string notValid = "1";
+                        socket.write(notValid);
 
-                // print server message:"the current k, current dist"
-                std::cout << buffer3;
-                // get k and dist from user.
-                getline(cin, input);
+                        cout << "invalid input\n";
+                        break;
+                    }
 
-                // set the sending data as the k and dist from user.
-                data = "\n";
-                if (!input.empty())
-                {
-                    data = input.c_str();
-                }
+                    // set the sending data as the second file path
+                    data = "\n";
+                    if (!input.empty())
+                    {
+                        data = input.c_str();
+                    }
+                    socket.write(data);
 
-                sent_bytes = send(sock, data, strlen(data), 0);
-                if (sent_bytes < 0)
+                    cout << "upload complete.\n";
+                    // in the end the server need to send upload complete and the menu together.
+                }
+                break;
+            case '2':
+                // code to execute for input starting with 2
+                if (true)
                 {
-                    perror("error sending data to server");
-                    close(sock);
-                    return 1;
-                }
-                // put here a validator so send -1 if it not change (pressed enter or not valid and printed not valid)
-                }
-                //2 lines up:put here a validator so send -1 if it not change (pressed enter or not valid and printed not valid)
+                    // send the input string
+                    socket.write(data);
+
+                     ans = socket.read();
+                    // print server message:"the current k, current dist"
+                    std::cout << ans;
+                    // get k and dist from user.
+                    getline(cin, input);
+
+                    // set the sending data as the k and dist from user.
+                    data = "\n";
+                    if (!input.empty())
+                    {
+                        data = input.c_str();
+                    }
+                    socket.write(data);
+
+                    // put here a validator so send -1 if it not change (pressed enter or not valid and printed not valid)
+                    }
+                 //2 lines up:put here a validator so send -1 if it not change (pressed enter or not valid and printed not valid)
                 break;
             case '3': {            
-                SocketIO socket(sock);
-   
                 // code to execute for input starting with 3
                 if(true){
                 //send the input string ('3')
@@ -326,49 +255,24 @@ int main(int argc, char *argv[])
                 // code to execute for input starting with 4
                 if (true) {
                 //send the input string ('4') 
-                int sent_bytes = send(sock, data, strlen(data), 0);
-                if (sent_bytes < 0)
-                {
-                    perror("error sending data to server");
-                    close(sock);
-                    return 1;
-                }
+                socket.write(data);
                 
                 //recive from server message with please upload/classify or start get the results.
-                char buffer1[4096] = "";
-                int read_bytes = recv(sock, buffer1, expected_data_len, 0);
-                if (read_bytes == 0)
-                {
-                    std::cout << "connection closed by server" << std::endl;
-                    close(sock);
-                    return 1;
-                }
+                ans = socket.read();
                 //print server message:"please upload/classify or first result"
-                std::cout << buffer1;
+                std::cout << ans;
                 //check if the buffer1 contain result.
-                if (buffer1[0] != 'p' || buffer1[0] != 'd'){
+                if (ans[0] != 'p' && ans[0] != 'd'){
                     bool loop = true;
                     //read all of the results.
                     do{
                         //need to send data so return to place where server send result and client listen.
-                        sent_bytes = send(sock, data, strlen(data), 0);
-                        if (sent_bytes < 0)
-                        {
-                            perror("error sending data to server");
-                            close(sock);
-                            return 1;
-                        }
+                        socket.write(data);
                         //read result line.
-                        char buffer2[4096] = "";
-                        read_bytes = recv(sock, buffer2, expected_data_len, 0);
-                        if (read_bytes == 0){
-                            std::cout << "connection closed by server" << std::endl;
-                            close(sock);
-                            return 1;
-                        }
+                        ans = socket.read();
                         //print server message:"please upload/classify or first result"
-                        std::cout << buffer2;
-                        if (buffer2[0] == 'd') {
+                        std::cout << ans;
+                        if (ans[0] == 'd') {
                             loop = false;
                         } 
                     } while (loop);
@@ -376,41 +280,25 @@ int main(int argc, char *argv[])
                 } 
                 //wait to user press enter.
                 getline(cin, input);
-                //need to send data so return to place where server send result and client listen.
-                sent_bytes = send(sock, data, strlen(data), 0);
-                if (sent_bytes < 0)
-                {
-                    perror("error sending data to server");
-                    close(sock);
-                    return 1;
+                if(input.size() == 0){
+                    input = "\n";
                 }
+                //need to send data so return to place where server send result and client listen.
+                socket.write(input);
                 }
                 break;
             case '5':
                 // code to execute for input starting with 5
                 if (true){
                 //send the input string ('5') 
-                int sent_bytes = send(sock, data, strlen(data), 0);
-                if (sent_bytes < 0)
-                {
-                    perror("error sending data to server");
-                    close(sock);
-                    return 1;
-                }
+                socket.write(data);
                 
                 //recive from server message with please upload/classify or start get the results.
-                char buffer1[4096] = "";
-                int read_bytes = recv(sock, buffer1, expected_data_len, 0);
-                if (read_bytes == 0)
-                {
-                    std::cout << "connection closed by server" << std::endl;
-                    close(sock);
-                    return 1;
-                }
+                ans = socket.read();
                 //print server message:"please upload/classify or first result"
-                if (buffer1[0] == 'p')
+                if (ans[0] == 'p')
                 {
-                    std::cout << buffer1;
+                    std::cout << ans;
                 } else {
                     //add thread
 
@@ -424,38 +312,22 @@ int main(int argc, char *argv[])
                     {
                             cout << "error opening file.\n";
                             //need to send data so return to place where server send result and client listen.
-                            int sent_bytes = send(sock, data, strlen(data), 0);
-                            if (sent_bytes < 0)
-                            {
-                                perror("error sending data to server");
-                                close(sock);
-                                return 1;
-                            }
+                            socket.write(" ");
                     }else{
                         //if buffer1[0] != p print in the file
-                        outFile << buffer1; // write line to file
+                        outFile << ans; // write line to file
                         //start writeing to file the results.
                         bool loop = true;
                         do{
                             //need to send data so return to place where server send result and client listen.
-                            int sent_bytes = send(sock, data, strlen(data), 0);
-                            if (sent_bytes < 0)
-                            {
-                                perror("error sending data to server");
-                                close(sock);
-                                return 1;
-                            }
+                            socket.write(data);
                             //read result line.
-                            char buffer2[4096] = "";
-                            int read_bytes = recv(sock, buffer2, expected_data_len, 0);
-                            if (read_bytes == 0){
-                                std::cout << "connection closed by server" << std::endl;
-                                close(sock);
-                                return 1;
-                            }
+
+                            ans = socket.read();
+
                             //print server message:"please upload/classify or first result"
-                            outFile << buffer2;
-                            if (buffer2[0] == 'd') {
+                            outFile << ans;
+                            if (ans[0] == 'd') {
                                 loop = false;
                             } 
                         } while (loop);
@@ -468,13 +340,7 @@ int main(int argc, char *argv[])
                 //wait to user press enter.
                 getline(cin, input);
                 //need to send data so return to place where server send result and client listen.
-                sent_bytes = send(sock, data, strlen(data), 0);
-                if (sent_bytes < 0)
-                {
-                    perror("error sending data to server");
-                    close(sock);
-                    return 1;
-                }
+                socket.write(data);
                 }
                 
                 break;
@@ -489,21 +355,7 @@ int main(int argc, char *argv[])
             //std::cout << defBuffer;
             break;
         }
-        // data = input.c_str();
-        // int data_len = strlen(data);
-        // if (strcmp(data, "8") == 0)
-        // {
-        //     // Close socket
-        //     close(sock);
-        //     return 0;
-        // }
-        // int sent_bytes = send(sock, data, data_len, 0);
-        // if (sent_bytes < 0)
-        // {
-        //     perror("error sending data to server");
-        //     close(sock);
-        //     return 1;
-        // }
+        
     }
     return 0;
 }
