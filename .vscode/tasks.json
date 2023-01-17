@@ -17,6 +17,7 @@
                 "${fileDirname}/CommandTwo.cpp",
                 "${fileDirname}/CommandThree.cpp",
                 "${fileDirname}/CommandFour.cpp",
+                "${fileDirname}/CommandFive.cpp",
                 "${fileDirname}/StandardIO.cpp",
                 "${fileDirname}/CLI.cpp" ,
                 "${fileDirname}/SocketIO.cpp" 
