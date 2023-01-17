@@ -357,48 +357,54 @@ vector<string> Validation::strToKDV(string str, int assign)
                     }
                 }
             }
-            
         }
-            // check if the k ends in the end of the string.
-            if (endDistIndex == 0)
-            {
-                endDistIndex = strLength;
-            }
-            // didnt enetered a distance or k.
-            if (distIndex == 0 || failed)
-            {
-                string comment = "invalid";
-                stringVect.push_back(comment);
-            }
-            else
-            {
-                string kStr, distStr;
-                // substr(starting index, length of chars to copy).
-                // seperate the given string to three strings representing vector, distance,k.
-                kStr = str.substr(0, distIndex - 1);
-                distStr = str.substr(distIndex, (endDistIndex - distIndex));
-                if (validDist(distStr))
-                {
-                    stringVect.push_back(distStr);
-                }
-                else
-                {
-                    string comment = "invalid";
-                    stringVect.push_back(comment);
-                }
+        // check if the k ends in the end of the string.
+        if (endDistIndex == 0)
+        {
+            endDistIndex = strLength;
+        }
+        // didnt enetered a distance or k.
+        /*if (distIndex == 0 || failed)
+        {
+            string comment = "invalid";
+            stringVect.push_back(comment);
+        }*/
 
-                
-                if (validK(kStr))
-                {
-                    stringVect.push_back(kStr);
-                }
-                else
-                {
-                    string comment = "invalid";
-                    stringVect.push_back(comment);
-                }
-            }
+        string kStr = "", distStr;
+        // substr(starting index, length of chars to copy).
+        // seperate the given string to three strings representing vector, distance,k.
+        //kStr = str.substr(0, distIndex - 1);
+        try {
+        int k = stoi(str);
+        kStr = to_string(k);
+        }
+        catch (exception e)
+        {
+            kStr = "invalid";
+        }
         
+        distStr = str.substr(distIndex, (endDistIndex - distIndex));
+        if (validDist(distStr))
+        {
+            stringVect.push_back(distStr);
+        }
+        else
+        {
+            //stringVect.clear();
+            string comment = "invalid";
+            stringVect.push_back(comment);
+        }
+
+        if (validK(kStr))
+        {
+            stringVect.push_back(kStr);
+        }
+        else
+        {
+            string comment = "invalid";
+            stringVect.push_back(comment);
+        }
+
         return stringVect;
     }
 }

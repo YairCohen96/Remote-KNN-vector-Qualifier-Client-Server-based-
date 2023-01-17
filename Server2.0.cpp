@@ -5,15 +5,28 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <netinet/in.h>
 #include <unistd.h>
+#include <thread>
 #include "KnnCalc.h"
 #include "DistanceCalc.h"
 #include "Validation.h"
 #include "CLI.h"
 
+void handleClient(int client_sockfd)
+{
+    // const char *response1 = "hello\n";
+    // int bytes_sent1 = send(client_sockfd, response1, strlen(response1), 0);
+
+    CLI cli(client_sockfd);
+    cli.start();
+    // Close the server socket
+    close(client_sockfd);
+}
+
 /**
  * main -  generate the server main .
-*/
+ */
 int main(int argc, char *argv[])
 {
     if (argc < 3)
@@ -21,7 +34,7 @@ int main(int argc, char *argv[])
         std::cerr << "Usage: tcpserver <ip-address> <port>" << std::endl;
         return 1;
     }
-    
+
     // Validate the port number
     long port = stol(argv[2]);
     if (port <= 0 || port > 65535)
@@ -39,11 +52,11 @@ int main(int argc, char *argv[])
             return 1;
         }
         inFile.close();*/
-    if(!valid.validFile(argv[1])) {
+    if (!valid.validFile(argv[1]))
+    {
         cout << "error openning file" << std::endl;
         return 1;
     }
-        
 
     struct sockaddr_in sa;
     // Create the socket
@@ -76,185 +89,201 @@ int main(int argc, char *argv[])
     vector<double> v;
     string dist;
     string kStr;
+    //vector<thread> clientThreads;
     while (true)
     {
         // Accept incoming connections
         struct sockaddr_in client_addr;
         socklen_t client_addr_len = sizeof(client_addr);
-        int client_sockfd = accept(sockfd, (struct sockaddr *)&client_addr, &client_addr_len);
+        //if (clientThreads.size() < 5)
+        //{
+            int client_sockfd = accept(sockfd, (struct sockaddr *)&client_addr, &client_addr_len);
 
-        if (client_sockfd == -1)
-        {
-            std::cerr << "Error accepting connection" << std::endl;
-            continue;
-        }
-        while (true)
-        {
-            //const char *response1 = "hello\n";
-            //int bytes_sent1 = send(client_sockfd, response1, strlen(response1), 0);
-                
-            
-            CLI cli(client_sockfd);
-            cli.start();
-            // Process the client's request
-            char buffer[4096] = "";
-            /* int n = read(client_sockfd, buffer, sizeof(buffer));
-            int bytes_received = recv(client_sockfd, buffer, sizeof(buffer), 0);
-            if (bytes_received == 0)
+            if (client_sockfd == -1)
             {
-                // Client has disconnected
-                close(client_sockfd);
+                std::cerr << "Error accepting connection" << std::endl;
                 continue;
             }
-
-            if (bytes_received == -1)
+            //clientThreads.emplace_back(handleClient, client_sockfd);
+            thread t(handleClient, client_sockfd);
+            t.detach();
+        //}
+        /*else
+        {
+            for (auto &thread : clientThreads)
             {
-                // std::cerr << "Error receiving data from client" << std::endl;
-                close(client_sockfd);
-                // continue;
-                break;
-            }*/
-
-            string str(buffer), vectorAsString, respon = "";
-            
-            vector<string> strVect = valid.strToKDV(str, 3);
-            v.clear();
-            dist.clear();
-            kStr.clear();
-            int kNum = 0;
-            bool failedInPut = false;
-            //check if the list of the vector distance and k is invalid.
-            if (strVect.size() != 3){
-                failedInPut = true;
-            } else {
-                vectorAsString = strVect.at(0);
-                dist = strVect.at(1);
-                kStr = strVect.at(2);
-                kNum = stoi(kStr);
-            }
-            if (failedInPut)
-            {
-                // const char *response = "#####Invalid Input";
-                // int bytes_sent = send(client_sockfd, response, strlen(response), 0);
-                // if (bytes_sent == -1)
-                // {
-                //     std::cerr << "Error sending data to client" << std::endl;
-                //     close(client_sockfd);
-                //     continue;
-                // }
-                continue;
-            }
-            KnnCalc k(kNum, argv[1], dist); // argv[1] is the path to file from server arguments
-            v = k.getCalc().createInputVector(vectorAsString);
-            k.setInputVector(v);
-            respon = k.launchCheckVectors();
-            //check if the vectors is compareable.
-            if(respon.size() == 0){
-                const char *response = "Invalid Input";
-                int bytes_sent = send(client_sockfd, response, strlen(response), 0);
-                if (bytes_sent == -1)
+                if (thread.joinable())
                 {
-                    std::cerr << "Error sending data to client" << std::endl;
-                    close(client_sockfd);
-                    continue;
+                    thread.join();
                 }
-                continue;
-            } 
-            //respon = k.TheMostReturnType();
-            const char *response = respon.c_str();
-            int bytes_sent = send(client_sockfd, response, strlen(response), 0);
-            if (bytes_sent == -1)
-            {
-                std::cerr << "Error sending data to client" << std::endl;
-                close(client_sockfd);
-                continue;
             }
-
-            // int endDistIndex = 0, distIndex = 0, kIndex = 0, i, strLength = str.size();
-            // for (i = 0; i < strLength; i++)
-            // {
-            //     if(distIndex == 0){
-            //         if(isalpha(str[i])){
-            //             distIndex = i;
-            //         }
-            //     } else if(endDistIndex == 0){
-            //         if(!isalpha(str[i])){
-            //             endDistIndex = i;
-            //         }
-            //     } else if(kIndex == 0){
-            //         if(isdigit(str[i])){
-            //             kIndex = i;
-            //         }
-            //     }   
-            // }
-            // if (distIndex == 0)
-            // {
-            //     distIndex = strLength;
-            // }
-            //V = str.substr(0, distIndex);
-            // str = str.substr(distIndex, strLength);
-            // while (isdigit(iss.peek()))
-            // {
-            //     double x;
-            //     iss >> x;
-            //     v.push_back(x);
-            //     iss.get();
-            // }            
-            // end of vector - now should be distance
-            //distance
-            //istringstream iss(str);
-            // if (iss.eof())
-            // {
-            //     failedInPut = true;
-            //     // const char *response = "no distance accepted!";
-            //     // int bytes_sent = send(client_sockfd, response, strlen(response), 0);      
-            //     // if (bytes_sent == -1)
-            //     // {
-            //     //     std::cerr << "Error sending data to client" << std::endl;
-            //     //     close(client_sockfd);
-            //     //     continue;
-            //     // }
-            //     // continue;
-            // } else{
-            //     iss >> dist;
-            // }           
-            // now k
-            // if (iss.eof())
-            // {
-            //     const char *response = "no K accepted!";
-            //     int bytes_sent = send(client_sockfd, response, strlen(response), 0);               
-            //     if (bytes_sent == -1)
-            //     {
-            //         std::cerr << "Error sending data to client" << std::endl;
-            //         close(client_sockfd);
-            //         continue;
-            //     }
-            //     continue;
-            // } else {
-            //     iss >> kStr;
-            //     int kNum = stoi(kStr);
-            // }
-            // iss.clear();
-            //  validate - k is an integer:
-            // if (kStr.compare(to_string(kNum)))
-            // { // not zero - not equal
-            //     cout << "chosen k is not a valid integer";
-            //     exit(1);
-            // }
-            //KnnCalc k(kNum, argv[1], dist); // argv[1] is the path to file from server arguments
-            // const char *response = k.TheMostReturnType().c_str();
-            // int bytes_sent = send(client_sockfd, response, strlen(response), 0);
-            // if (bytes_sent == -1)
-            // {
-            //     std::cerr << "Error sending data to client" << std::endl;
-            //     close(client_sockfd);
-            //     continue;
-            // }
-            // Close the client socket
-            // close(client_sockfd);
-        }
+            clientThreads.clear();
+        }*/
     }
-    // Close the server socket
-    close(sockfd);
+    // break;
+    //  Process the client's request
+    //  char buffer[4096] = "";
+    /* int n = read(client_sockfd, buffer, sizeof(buffer));
+    int bytes_received = recv(client_sockfd, buffer, sizeof(buffer), 0);
+    if (bytes_received == 0)
+    {
+        // Client has disconnected
+        close(client_sockfd);
+        continue;
+    }
+
+    if (bytes_received == -1)
+    {
+        // std::cerr << "Error receiving data from client" << std::endl;
+        close(client_sockfd);
+        // continue;
+        break;
+    }*/
+
+    /*string str(buffer), vectorAsString, respon = "";
+
+    vector<string> strVect = valid.strToKDV(str, 3);
+    v.clear();
+    dist.clear();
+    kStr.clear();
+    int kNum = 0;
+    bool failedInPut = false;
+    // check if the list of the vector distance and k is invalid.
+    if (strVect.size() != 3)
+    {
+        failedInPut = true;
+    }
+    else
+    {
+        vectorAsString = strVect.at(0);
+        dist = strVect.at(1);
+        kStr = strVect.at(2);
+        kNum = stoi(kStr);
+    }
+    if (failedInPut)
+    {
+        // const char *response = "#####Invalid Input";
+        // int bytes_sent = send(client_sockfd, response, strlen(response), 0);
+        // if (bytes_sent == -1)
+        // {
+        //     std::cerr << "Error sending data to client" << std::endl;
+        //     close(client_sockfd);
+        //     continue;
+        // }
+        continue;
+    }
+    KnnCalc k(kNum, argv[1], dist); // argv[1] is the path to file from server arguments
+    v = k.getCalc().createInputVector(vectorAsString);
+    k.setInputVector(v);
+    respon = k.launchCheckVectors();
+    // check if the vectors is compareable.
+    if (respon.size() == 0)
+    {
+        const char *response = "Invalid Input";
+        int bytes_sent = send(client_sockfd, response, strlen(response), 0);
+        if (bytes_sent == -1)
+        {
+            std::cerr << "Error sending data to client" << std::endl;
+            close(client_sockfd);
+            break;
+            ;
+        }
+        continue;
+    }
+    // respon = k.TheMostReturnType();
+    const char *response = respon.c_str();
+    int bytes_sent = send(client_sockfd, response, strlen(response), 0);
+    if (bytes_sent == -1)
+    {
+        std::cerr << "Error sending data to client" << std::endl;
+        close(client_sockfd);
+        break;
+    }
+
+    // int endDistIndex = 0, distIndex = 0, kIndex = 0, i, strLength = str.size();
+    // for (i = 0; i < strLength; i++)
+    // {
+    //     if(distIndex == 0){
+    //         if(isalpha(str[i])){
+    //             distIndex = i;
+    //         }
+    //     } else if(endDistIndex == 0){
+    //         if(!isalpha(str[i])){
+    //             endDistIndex = i;
+    //         }
+    //     } else if(kIndex == 0){
+    //         if(isdigit(str[i])){
+    //             kIndex = i;
+    //         }
+    //     }
+    // }
+    // if (distIndex == 0)
+    // {
+    //     distIndex = strLength;
+    // }
+    // V = str.substr(0, distIndex);
+    // str = str.substr(distIndex, strLength);
+    // while (isdigit(iss.peek()))
+    // {
+    //     double x;
+    //     iss >> x;
+    //     v.push_back(x);
+    //     iss.get();
+    // }
+    // end of vector - now should be distance
+    // distance
+    // istringstream iss(str);
+    // if (iss.eof())
+    // {
+    //     failedInPut = true;
+    //     // const char *response = "no distance accepted!";
+    //     // int bytes_sent = send(client_sockfd, response, strlen(response), 0);
+    //     // if (bytes_sent == -1)
+    //     // {
+    //     //     std::cerr << "Error sending data to client" << std::endl;
+    //     //     close(client_sockfd);
+    //     //     continue;
+    //     // }
+    //     // continue;
+    // } else{
+    //     iss >> dist;
+    // }
+    // now k
+    // if (iss.eof())
+    // {
+    //     const char *response = "no K accepted!";
+    //     int bytes_sent = send(client_sockfd, response, strlen(response), 0);
+    //     if (bytes_sent == -1)
+    //     {
+    //         std::cerr << "Error sending data to client" << std::endl;
+    //         close(client_sockfd);
+    //         continue;
+    //     }
+    //     continue;
+    // } else {
+    //     iss >> kStr;
+    //     int kNum = stoi(kStr);
+    // }
+    // iss.clear();
+    //  validate - k is an integer:
+    // if (kStr.compare(to_string(kNum)))
+    // { // not zero - not equal
+    //     cout << "chosen k is not a valid integer";
+    //     exit(1);
+    // }
+    // KnnCalc k(kNum, argv[1], dist); // argv[1] is the path to file from server arguments
+    // const char *response = k.TheMostReturnType().c_str();
+    // int bytes_sent = send(client_sockfd, response, strlen(response), 0);
+    // if (bytes_sent == -1)
+    // {
+    //     std::cerr << "Error sending data to client" << std::endl;
+    //     close(client_sockfd);
+    //     continue;
+    // }
+    // Close the client socket
+    // close(client_sockfd);
+
+    // handloClient(client_sockfd);
+*/
     return 0;
 }
