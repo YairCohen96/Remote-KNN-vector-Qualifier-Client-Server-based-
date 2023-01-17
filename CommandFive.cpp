@@ -1,11 +1,11 @@
-#include "CommandFour.h"
+#include "CommandFive.h"
 
 using namespace std;
 
 /**
  * execute - emplmntation of command header.
 */
-void CommandFour::execute() {
+void CommandFive::execute() {
     //check avalability for runchecking if not exist print "data upload please."
     if(!validator.existFiles(my_data.unclass_path, my_data.class_path)){
         Command::dio->write("please upload data.\n");
