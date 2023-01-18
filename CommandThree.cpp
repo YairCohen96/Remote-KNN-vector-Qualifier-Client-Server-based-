@@ -65,6 +65,8 @@ void CommandThree::execute() {
             }else {
                runCheck.push_back(currentVectType) ;
             }
+            Command::dio->write(" ");
+            classVect =  Command::dio->read();
             
         }
 
