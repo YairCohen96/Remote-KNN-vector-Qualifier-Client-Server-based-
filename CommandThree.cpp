@@ -61,7 +61,7 @@ void CommandThree::execute() {
             if(currentVectType.second.size() == 0){
                 //failed = true;
                 //counter -= 1; the idea to do so was for the print at 4 be consecutive but it suppose to be as the line in text
-                continue;
+                //continue;
             }else {
                runCheck.push_back(currentVectType) ;
             }
