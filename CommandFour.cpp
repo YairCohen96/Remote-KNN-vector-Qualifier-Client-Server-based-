@@ -19,10 +19,10 @@ void CommandFour::execute() {
         for (i = 0; i < endI; i++)
         {
             //string s = to_string(my_data.results.at(i).first) + "\t" + my_data.results.at(i).second + "\n";
-            Command::dio->write(to_string(my_data->results.at(i).first) + "\t" + my_data->results.at(i).second + "\n");
+            Command::dio->write(to_string((int)my_data->results.at(i).first) + "\t" + my_data->results.at(i).second + "\n");
             string retToMen2 = Command::dio->read();
         }
-        Command::dio->write("done.\n");
+        Command::dio->write("Done.\n");
         string retToMen3 = Command::dio->read();
     }
     
