@@ -13,7 +13,7 @@ class DataSet
 public:
     // DataSet data - {int k, string unclass path, string class path, vector of pairs(int,string) results, string distance};
     int k = 5;
-    string unclass_path, class_path, distance = "EUC";
+    string unclass_path, class_path, distance = "AUC";
     vector<pair<double, string>> results;
     virtual void setK(int j){
         k = j;

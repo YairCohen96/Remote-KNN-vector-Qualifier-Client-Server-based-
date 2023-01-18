@@ -50,11 +50,12 @@ void CommandThree::execute() {
         classVect =  Command::dio->read();
         while (classVect[0] != 'f')
         {
+            
             ++counter;
             vector<double>  vectorFromFile = knn.getVTFromCSVLine(classVect).first;
             pair<double, string> currentVectType;
             currentVectType.first = counter;
-            knn.getCalc().setV1(vectorFromFile);
+            knn.setInputVector(vectorFromFile);
             currentVectType.second = knn.launchCheckVectors();
             //check if something failed
             if(currentVectType.second.size() == 0){
@@ -64,6 +65,7 @@ void CommandThree::execute() {
             }else {
                runCheck.push_back(currentVectType) ;
             }
+            
         }
 
         //set result:
