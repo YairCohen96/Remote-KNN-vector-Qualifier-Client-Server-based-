@@ -55,7 +55,7 @@ void SocketIO::write(string text)
     int bytes_sent = send(client_sockfd, response, strlen(response), 0);
     if (bytes_sent == -1)
     {
-        std::cerr << "Error sending data to client" << std::endl;
+        std::cerr << "Error sending data" << std::endl;
         close(client_sockfd);
         //continue;
     }
