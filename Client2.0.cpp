@@ -235,7 +235,8 @@ int main(int argc, char *argv[])
 
                     //open second and send line by line. in commandThree- classify the line and save in results.
                     ifstream in_file1(unClassify);
-                    while (getline(in_file1, input)) {
+                    while (!in_file1.eof()) {
+                        getline(in_file1, input);
                         socket.write(input);
                         ans = socket.read();
                     }
@@ -272,7 +273,7 @@ int main(int argc, char *argv[])
                         ans = socket.read();
                         //print server message:"please upload/classify or first result"
                         std::cout << ans;
-                        if (ans[0] == 'd') {
+                        if (ans[0] == 'D' || ans[0] == 'd') {
                             loop = false;
                         } 
                     } while (loop);
@@ -327,13 +328,13 @@ int main(int argc, char *argv[])
                             ans = socket.read();
 
                             //print server message:"please upload/classify or first result"
-                            outFile << ans;
-                            if (ans[0] == 'd') {
+                            
+                            if (ans[0] == 'D' || ans[0] == 'd') {
                                 loop = false;
-                            } 
+                            } else {
+                                outFile << ans;
+                            }
                         } while (loop);
-                        
-                        
                         outFile.close(); // close file
                     }
    
@@ -341,7 +342,7 @@ int main(int argc, char *argv[])
                 //wait to user press enter.
                 getline(cin, input);
                 //need to send data so return to place where server send result and client listen.
-                socket.write(data);
+                socket.write(" ");
                 }
                 
                 break;
