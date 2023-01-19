@@ -29,14 +29,21 @@ void handleClient(int client_sockfd)
  */
 int main(int argc, char *argv[])
 {
-    if (argc < 3)
+    if (argc < 2)
     {
         std::cerr << "Usage: tcpserver <ip-address> <port>" << std::endl;
         return 1;
     }
 
     // Validate the port number
-    long port = stol(argv[2]);
+    long port = -1;
+    try{
+    port = stol(argv[1]);
+    }
+    catch (exception e) {
+        std::cerr << "Invalid port number" << std::endl;
+        return 1;
+    }
     if (port <= 0 || port > 65535)
     {
         std::cerr << "Invalid port number" << std::endl;
