@@ -10,7 +10,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/Server2.0", //this will be at args[0]
-            "args": ["/home/oem/Desktop/AP1/YC-AS2/datasets/iris/iris_classified.txt","5555"],
+            "args": ["5555"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
