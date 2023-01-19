@@ -21,6 +21,9 @@ void CommandFive::execute() {
             //string s = to_string(my_data.results.at(i).first) + "\t" + my_data.results.at(i).second + "\n";
             Command::dio->write(to_string((int)my_data->results.at(i).first) + "\t" + my_data->results.at(i).second + "\n");
             string retToMen2 = Command::dio->read();
+            if (i == 0 && retToMen2[0] == 'f'){
+                return;
+            }
         }
         Command::dio->write("done.\n");
         string retToMen3 = Command::dio->read();
