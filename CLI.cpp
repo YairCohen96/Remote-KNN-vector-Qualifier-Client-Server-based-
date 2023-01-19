@@ -47,8 +47,9 @@ void CLI::start()
     
     string menu = "Welcome to KNN Classifier Server. Please choose an option:\n1. upload an unclassified csv data file\n2. algorithm settings\n3. classify data\n4. display results\n5. download results\n8. exit\n";
 
-    while (true)
+    while (dio->getClientSockfd() != -1)
     {
+
         dio->write(menu);
         string option = dio->read();
         if (option.size() == 0)

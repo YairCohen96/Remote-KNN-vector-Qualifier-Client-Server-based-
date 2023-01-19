@@ -17,7 +17,7 @@ using namespace std;
 class SocketIO : public DefaultIO
 {
 private:
-    int client_sockfd;
+    //int client_sockfd;
 public:
     SocketIO(int client_sockfd);
     string read() override;

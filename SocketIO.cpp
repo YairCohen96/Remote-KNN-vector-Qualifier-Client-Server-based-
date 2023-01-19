@@ -29,6 +29,7 @@ string SocketIO::read()
     {
         // Client has disconnected
         close(client_sockfd);
+        setClientSockfd(-1);
         return "";
         // continue;
     }

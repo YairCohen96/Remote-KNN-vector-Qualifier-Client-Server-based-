@@ -9,13 +9,14 @@
 
 using namespace std;
 class DefaultIO {
-private:
-    
+protected:
+    int client_sockfd = -1;
     
 public:
     virtual void write(string text) = 0;
     virtual string read() = 0;
-    
+    int getClientSockfd () {return client_sockfd;}
+    void setClientSockfd (int upd) {client_sockfd = upd;}
 };
 
 
