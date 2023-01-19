@@ -279,8 +279,8 @@ int main(int argc, char *argv[])
                 //print server message:"please upload/classify or first result"
                 std::cout << ans;
                 //check if the buffer1 contain result.
-                if (ans[0] != 'p' && ans[0] != 'd'){
-                    bool loop = true;
+                bool loop = true;
+                if (ans[0] != 'p' && ans[0] != 'D'){
                     //read all of the results.
                     do{
                         //need to send data so return to place where server send result and client listen.
@@ -295,28 +295,32 @@ int main(int argc, char *argv[])
                     } while (loop);
                     
                 } 
-                //wait to user press enter.
-                getline(cin, input);
-                if(input.size() == 0){
-                    input = "\n";
+                if (!loop)
+                {
+                    getline(cin, input);
+                    //wait to user press enter.               
+                    if(input.size() == 0){
+                        input = "\n";
+                    }
+                    //need to send data so return to place where server send result and client listen.
+                
                 }
-                //need to send data so return to place where server send result and client listen.
-                socket.write(input);
+                socket.write("#");
                 }
                 break;
             case '5':
                 // code to execute for input starting with 5
                 if (true){
                 //send the input string ('5') 
-                socket.write(data);
+                socket.write("5");
                 
                 //recive from server message with please upload/classify or start get the results.
-                ans = socket.read();
+                string ans1 = socket.read();
                 //print server message:"please upload/classify or first result"
-                if (ans[0] == 'p')
+                if (ans1[0] == 'p')
                 {
-                    std::cout << ans;
-                    socket.write(" ");
+                    std::cout << ans1;
+                    socket.write("&");
                 } else {
                     //add thread
 
@@ -341,7 +345,7 @@ int main(int argc, char *argv[])
                         result.push_back(ans);
                         do{
                             //need to send data so return to place where server send result and client listen.
-                            socket.write(" ");
+                            socket.write("^");
                             //read result line.
 
                             ans = socket.read();
@@ -372,7 +376,7 @@ int main(int argc, char *argv[])
                 //wait to user press enter.
                 //getline(cin, input);
                 //need to send data so return to place where server send result and client listen.
-                socket.write(" ");
+                //socket.write("!");
                 }
                 
                 break;
