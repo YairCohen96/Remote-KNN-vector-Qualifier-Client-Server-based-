@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -std=c++11
+CFLAGS = -std=c++11 -pthread
 
 SOURCES_CLIENT = Client2.0.cpp Validation.cpp SocketIO.cpp
 SOURCES_SERVER = Server2.0.cpp Validation.cpp DistanceCalc.cpp KnnCalc.cpp CLI.cpp CommandOne.cpp CommandTwo.cpp CommandThree.cpp CommandFour.cpp CommandFive.cpp SocketIO.cpp
