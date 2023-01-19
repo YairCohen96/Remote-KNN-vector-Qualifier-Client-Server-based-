@@ -70,13 +70,20 @@ void CommandThree::execute() {
             
         }
 
-        //set result:
-        my_data->set_results(runCheck);
+        if(runCheck.size() > 0) {
+            //set result:
+            my_data->set_results(runCheck);
+            //send finish
+            Command::dio->write("classifying data complete\n");
+            string backToMain =  Command::dio->read();
+        } else {
+            my_data->set_results(runCheck);
+            Command::dio->write("data uploaded incompitable\n");
+            string backToMain =  Command::dio->read();
+        }
+        
         //update_after_executed(my_data);
 
-        //send finish
-        Command::dio->write("classifying data complete\n");
-        string backToMain =  Command::dio->read();
 
         remove("classify.txt");
 
