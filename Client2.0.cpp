@@ -9,10 +9,26 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <thread>
 #include "Validation.h"
 #include "SocketIO.h"
 
 using namespace std;
+
+void printToFile(string fileName,vector<string> result) {
+    ofstream outFile;
+    outFile.open(fileName, std::ios::app); // open file in append mode
+    if (!outFile.is_open())
+    {
+            return;
+    }
+    int i, endI = result.size();
+    for (i = 0; i < endI; i++)
+    {
+        outFile << (result.at(i));
+    }
+    outFile.close(); // close file
+}
 
 /**
  * main - generate a client side and comunicate with user and server.
@@ -306,7 +322,8 @@ int main(int argc, char *argv[])
 
                     //not sure this message need to shown.
                     cout << "please upload path to save the results.\n";
-                    getline(cin, input);
+                    string fileName;
+                    getline(cin, fileName);
                     //ifstream inFile;
                     ofstream outFile;
                     outFile.open(input, std::ios::app); // open file in append mode
@@ -314,15 +331,17 @@ int main(int argc, char *argv[])
                     {
                             cout << "error opening file.\n";
                             //need to send data so return to place where server send result and client listen.
-                            socket.write(" ");
+                            socket.write("failed");
                     }else{
                         //if buffer1[0] != p print in the file
-                        outFile << ans; // write line to file
+                        //outFile << ans; // write line to file
                         //start writeing to file the results.
                         bool loop = true;
+                        vector <string> result;
+                        result.push_back(ans);
                         do{
                             //need to send data so return to place where server send result and client listen.
-                            socket.write(data);
+                            socket.write(" ");
                             //read result line.
 
                             ans = socket.read();
@@ -332,15 +351,26 @@ int main(int argc, char *argv[])
                             if (ans[0] == 'D' || ans[0] == 'd') {
                                 loop = false;
                             } else {
-                                outFile << ans;
+                                result.push_back(ans);
+                                //outFile << ans;
                             }
                         } while (loop);
-                        outFile.close(); // close file
+
+                        thread t(printToFile, fileName, result);
+                        t.detach();
+
+                        // //wrap in thread and kill the thread after
+                        // int i, endI = result.size();
+                        // for (i = 0; i < endI; i++)
+                        // {
+                        //     outFile << (result.at(i));
+                        // }
+                        // outFile.close(); // close file
                     }
    
                 }
                 //wait to user press enter.
-                getline(cin, input);
+                //getline(cin, input);
                 //need to send data so return to place where server send result and client listen.
                 socket.write(" ");
                 }
