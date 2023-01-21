@@ -29,8 +29,8 @@ void CLI::start()
     four.setData(data);
     CommandFive five;
     five.setData(data);
-    // CommandEight eight;
-    // eight.setData(data);
+    CommandEight eight;
+    eight.setData(data);
     
     string menu = "Welcome to KNN Classifier Server. Please choose an option:\n1. upload an unclassified csv data file\n2. algorithm settings\n3. classify data\n4. display results\n5. download results\n8. exit\n";
 
@@ -77,6 +77,8 @@ void CLI::start()
             five.execute();
             break;
         case 8:
+            eight.setDio(dio);
+            eight.execute();
             return;
         default:
             dio->write("invalid option.\n");
