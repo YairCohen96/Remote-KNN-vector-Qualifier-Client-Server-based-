@@ -12,12 +12,12 @@
 #include "DistanceCalc.h"
 #include "Validation.h"
 #include "CLI.h"
-
+/**
+ * handleClient - method jandleing clients for threads.
+ * @param client_sockfd - the socket of the client.
+*/
 void handleClient(int client_sockfd)
 {
-    // const char *response1 = "hello\n";
-    // int bytes_sent1 = send(client_sockfd, response1, strlen(response1), 0);
-
     CLI cli(client_sockfd);
     cli.start();
     // Close the server socket
@@ -100,18 +100,6 @@ int main(int argc, char *argv[])
             //clientThreads.emplace_back(handleClient, client_sockfd);
             thread t(handleClient, client_sockfd);
             t.detach();
-        //}
-        /*else
-        {
-            for (auto &thread : clientThreads)
-            {
-                if (thread.joinable())
-                {
-                    thread.join();
-                }
-            }
-            clientThreads.clear();
-        }*/
     }
   
     return 0;

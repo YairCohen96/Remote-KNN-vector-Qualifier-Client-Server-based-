@@ -86,33 +86,15 @@ int main(int argc, char *argv[])
     while (true)
     {
         SocketIO socket(sock);
-        // Receive data from server
-        // char buffer[4096];
-        // memset(buffer, 0, sizeof(buffer));
-        // int expected_data_len = sizeof(buffer);
-        // int read_bytes = recv(sock, buffer, expected_data_len, 0);
-        // if (read_bytes == 0)
-        // {
-        //     std::cout << "connection closed by server" << std::endl;
-        //     close(sock);
-        //     return 1;
-        // }
-        // else if (read_bytes < 0)
-        // {
-        //     perror("error receiving data from server");
-        //     close(sock);
-        //     return 1;
-        // }
+        
         string ans = socket.read();
-        // else
-        // {
-        std::cout << ans; //<< std::endl buffer
-        //}
-
+        
+        std::cout << ans; 
+        
         // Send data to server
         string input;
 
-        const char *data = "\n"; // = "1 2 3 4 MAN 12";
+        const char *data = "\n";
         getline(cin, input);
         if (!input.empty())
         {
@@ -353,8 +335,6 @@ int main(int argc, char *argv[])
                     }
                     else
                     {
-                        // if buffer1[0] != p print in the file
-                        // outFile << ans; // write line to file
                         // start writeing to file the results.
                         bool loop = true;
                         vector<string> result;
@@ -364,11 +344,8 @@ int main(int argc, char *argv[])
                             // need to send data so return to place where server send result and client listen.
                             socket.write("^");
                             // read result line.
-
                             ans = socket.read();
-
                             // print server message:"please upload/classify or first result"
-
                             if (ans[0] == 'D' || ans[0] == 'd')
                             {
                                 loop = false;
@@ -382,20 +359,8 @@ int main(int argc, char *argv[])
 
                         thread t(printToFile, fileName, result);
                         t.detach();
-
-                        // //wrap in thread and kill the thread after
-                        // int i, endI = result.size();
-                        // for (i = 0; i < endI; i++)
-                        // {
-                        //     outFile << (result.at(i));
-                        // }
-                        // outFile.close(); // close file
                     }
                 }
-                // wait to user press enter.
-                // getline(cin, input);
-                // need to send data so return to place where server send result and client listen.
-                // socket.write("!");
             }
 
             break;
@@ -405,10 +370,6 @@ int main(int argc, char *argv[])
         default:
             // code to execute if input starts with any other character
             socket.write("6");
-            break;
-
-            // print server message:succes/failed
-            // std::cout << defBuffer;
             break;
         }
     }
