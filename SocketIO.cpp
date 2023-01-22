@@ -20,7 +20,6 @@ SocketIO::SocketIO(int client_sockfd)
 string SocketIO::read()
 {
     char buffer[4096] = "";
-    // int n = read(client_sockfd, buffer, sizeof(buffer));
     int bytes_received = recv(client_sockfd, buffer, sizeof(buffer), 0);
     if (buffer == "-2") {
         return "";

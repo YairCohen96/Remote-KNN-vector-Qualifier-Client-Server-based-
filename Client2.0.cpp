@@ -15,6 +15,11 @@
 
 using namespace std;
 
+/**
+ * printToFile - open file and write the result to.
+ * @param fileName - open this as file.
+ * @param result - write this vector to file.
+*/
 void printToFile(string fileName, vector<string> result)
 {
     ofstream outFile;

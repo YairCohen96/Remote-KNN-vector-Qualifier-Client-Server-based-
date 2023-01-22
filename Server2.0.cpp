@@ -88,18 +88,14 @@ int main(int argc, char *argv[])
         // Accept incoming connections
         struct sockaddr_in client_addr;
         socklen_t client_addr_len = sizeof(client_addr);
-        //if (clientThreads.size() < 5)
-        //{
-            int client_sockfd = accept(sockfd, (struct sockaddr *)&client_addr, &client_addr_len);
-
-            if (client_sockfd == -1)
-            {
-                std::cerr << "Error accepting connection" << std::endl;
-                continue;
-            }
-            //clientThreads.emplace_back(handleClient, client_sockfd);
-            thread t(handleClient, client_sockfd);
-            t.detach();
+        int client_sockfd = accept(sockfd, (struct sockaddr *)&client_addr, &client_addr_len);
+        if (client_sockfd == -1)
+        {
+            std::cerr << "Error accepting connection" << std::endl;
+            continue;
+        }
+        thread t(handleClient, client_sockfd);
+        t.detach();
     }
   
     return 0;

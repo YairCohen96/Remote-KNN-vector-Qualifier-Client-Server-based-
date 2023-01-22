@@ -16,7 +16,6 @@ void CommandTwo::execute() {
     }
     if(update.size()) { // input was entered - need to update
         //need to modify strToVDK only for KD
-        //string kStr, distStr;
         vector<string> dk = validator.strToKDV(update, 2);
         bool kFlag = false, distFlag = false;
         if(dk.size () != 2 || dk.at(1) == "invalid") {
@@ -32,6 +31,5 @@ void CommandTwo::execute() {
         }
         my_data->setK(stoi(dk.at(1)));
         my_data->set_distance(dk.at(0));
-        //update_after_executed(my_data);
     }
 }

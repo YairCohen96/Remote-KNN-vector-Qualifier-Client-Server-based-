@@ -18,7 +18,6 @@ void CommandFive::execute() {
         int i, endI = my_data->results.size();
         for (i = 0; i < endI; i++)
         {
-            //string s = to_string(my_data.results.at(i).first) + "\t" + my_data.results.at(i).second + "\n";
             Command::dio->write(to_string((int)my_data->results.at(i).first) + "\t" + my_data->results.at(i).second + "\n");
             string retToMen2 = Command::dio->read();
             if (i == 0 && retToMen2[0] == 'f'){

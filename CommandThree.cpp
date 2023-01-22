@@ -12,7 +12,6 @@ using namespace std;
 
 void CommandThree::execute() {
     //check avalability for runchecking if not exist print "data upload please."
-    //DataSet mine = my_data;
     if(!validator.existFiles(my_data->unclass_path, my_data->class_path)){
         Command::dio->write("0");
         string retToMen = Command::dio->read();
@@ -29,8 +28,6 @@ void CommandThree::execute() {
         
         //get all classify vectors as: string from client as vector and type and save as pair of vector and type.
         //"f" notify endof clasiffy
-        
-        //vector <pair<vector<double>, string>> classVectorsVect;
         
         ofstream out_file;
         thread::id id = this_thread::get_id();
@@ -65,9 +62,6 @@ void CommandThree::execute() {
             currentVectType.second = knn.launchCheckVectors();
             //check if something failed
             if(currentVectType.second.size() == 0){
-                //failed = true;
-                //counter -= 1; the idea to do so was for the print at 4 be consecutive but it suppose to be as the line in text
-                //continue;
             }else {
                runCheck.push_back(currentVectType) ;
             }
@@ -87,18 +81,6 @@ void CommandThree::execute() {
             Command::dio->write("data uploaded incompitable\n");
             string backToMain =  Command::dio->read();
         }
-        
-        //update_after_executed(my_data);
-
-
         remove(file.c_str());
-
-        /**
-         * what if failed in middle?:
-         * the files wasnt good(we check only opening)...
-         * 
-         */
-
-        
     }
 }

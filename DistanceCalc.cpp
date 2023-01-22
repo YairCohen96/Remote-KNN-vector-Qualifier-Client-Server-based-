@@ -12,9 +12,6 @@ using namespace std;
     */
     DistanceCalc::DistanceCalc()
     {
-        //get 2 vectors from user.
-        //v1 = createInputVector();
-        //v2 = createInputVector();
     }
 
     /**
@@ -117,8 +114,6 @@ using namespace std;
         string temp = ""; //input
         //set boolean varabales for negative numbers and decimal points.
         bool dotFlag = false, minusFlag = false;
-        //read buffer to input
-        // getline(cin, input);
         //check if there is no input
         if (input.size() == 0)
         {

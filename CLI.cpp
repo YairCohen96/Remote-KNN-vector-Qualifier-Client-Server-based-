@@ -13,6 +13,9 @@ CLI::CLI(int client_sockfd)
     dio = new SocketIO(client_sockfd);
 }
 
+/**
+ * CLI - distrctor to cli
+*/
 CLI::~CLI()
 {
 
