@@ -58,7 +58,7 @@ void SocketIO::write(string text)
     {
         std::cerr << "Error sending data" << std::endl;
         close(client_sockfd);
-        throw new exception();
+        //throw new exception();
         //continue;
     }
 };

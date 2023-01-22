@@ -1,6 +1,8 @@
 #include "CommandThree.h"
 #include <filesystem>
 #include <cstdio>
+#include <thread>
+#include <sstream>
 
 using namespace std;
 
@@ -31,7 +33,11 @@ void CommandThree::execute() {
         //vector <pair<vector<double>, string>> classVectorsVect;
         
         ofstream out_file;
-        out_file.open("classify.txt");
+        thread::id id = this_thread::get_id();
+        stringstream ss;
+        ss << id;
+        string file = ss.str();
+        out_file.open(file);
         
         while(classVect[0] != 'f'){
             out_file << classVect << endl;
@@ -40,7 +46,7 @@ void CommandThree::execute() {
         }
         out_file.close();
 
-        KnnCalc knn(my_data->k, "classify.txt", my_data->distance);
+        KnnCalc knn(my_data->k, file, my_data->distance);
 
         //get all unclass vectors as: string with only vector.and classify each one and save in the result.
         int counter = 0;
@@ -85,7 +91,7 @@ void CommandThree::execute() {
         //update_after_executed(my_data);
 
 
-        remove("classify.txt");
+        remove(file.c_str());
 
         /**
          * what if failed in middle?:
