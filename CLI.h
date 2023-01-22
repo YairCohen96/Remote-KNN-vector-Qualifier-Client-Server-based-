@@ -25,6 +25,7 @@ private:
 
 public:
     CLI(int client_sockfd);
+    ~CLI();
     void start();
     
 };
