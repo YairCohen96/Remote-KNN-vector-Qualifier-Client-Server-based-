@@ -326,7 +326,7 @@ int main(int argc, char *argv[])
                     getline(cin, fileName);
                     // ifstream inFile;
                     ofstream outFile;
-                    outFile.open(input, std::ios::app); // open file in append mode
+                    outFile.open(fileName, std::ios::app); // open file in append mode
                     if (!outFile.is_open())
                     {
                         cout << "error opening file.\n";
@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
                         // start writeing to file the results.
                         bool loop = true;
                         vector<string> result;
-                        result.push_back(ans);
+                        result.push_back(ans1);
                         do
                         {
                             // need to send data so return to place where server send result and client listen.
@@ -356,7 +356,7 @@ int main(int argc, char *argv[])
                                 // outFile << ans;
                             }
                         } while (loop);
-
+                        socket.write("1^");
                         thread t(printToFile, fileName, result);
                         t.detach();
                     }
