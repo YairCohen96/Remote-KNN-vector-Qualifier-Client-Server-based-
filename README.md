@@ -25,7 +25,7 @@ after one client finish and exit, the server - will stay open for next incoming 
 
 terms explanation:
 distance - a type of distance between 2 vectors (one will be classifieid by the other typically)
-K- run on the k nearest vectors from the file and return the type of the most return type.
+K- run on the k nearest vectors from the file and return the type of the most return type (if the k you choose is bigger than amount of vectors in file - the program will return the comparison to all of the vectors in the file).
 path to a obj_classified.csv file - path (relative or direct) to a file of classified vectors to train with.
 path to a obj_Unclassified.csv file - path (relative or direct) to a file of classified vectors to test.
 
